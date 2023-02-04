@@ -1,4 +1,5 @@
-<script lang="ts">
+<div>DEMO</div>
+<!-- <script lang="ts">
 	import BaseOn from "./BaseOn.svelte";
 	import Date from "./Date.svelte";
 	export let data: any;
@@ -62,4 +63,4 @@
 		</ul>
 	</div>
 </section>
-
+ -->
