@@ -3,7 +3,7 @@
 	import '../app.css';
 </script>
 
-<div class="flex flex-col h-screen items-center px-4">
+<div class="flex flex-col h-full items-center px-4">
 	<Header />
 
 	<main class="h-full w-full flex justify-center">

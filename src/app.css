@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body, html {
+	@apply h-full;
+}
 
 .font-ropa-sans {
 	font-family: 'Ropa Sans', sans-serif;
