@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 body, html {
-	@apply h-full;
+	@apply h-auto flex min-h-full justify-center;
 }
 
 .font-ropa-sans {

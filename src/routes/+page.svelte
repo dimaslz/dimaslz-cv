@@ -11,9 +11,9 @@
 </svelte:head>
 
 <section class="flex min-h-full flex-grow text-sm flex-col container max-w-[800px] items-center py-8">
-	<div class="flex w-full">
+	<div class="flex w-full flex-col md:flex-row">
 		<div class="w-full">
-			<h1 class="text-5xl flex flex-col w-full font-ropa-sans">
+			<h1 class="text-5xl flex flex-col w-full font-ropa-sans mb-4 md:mb-0">
 				<span>
 					{data?.name} {data?.lastname}
 				</span>
