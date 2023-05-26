@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { BaseOn, Date } from "@/components";
-	import { DownloadIcon, DownloadIconAnimated } from "@/components/icons";
+	import { DownloadIcon, LottiePlayer } from "@/components/icons";
 
 	export let data: any;
 
@@ -24,9 +24,11 @@
 
 		const pdfURL = URL.createObjectURL(pdf);
 
+		const currentYear: number = (new window.Date()).getFullYear();
+		const filename = `dimas-lopez-zurita-${currentYear}.pdf`
     const link = document.createElement('a');
     link.href = pdfURL;
-    link.download = 'mdresume.pdf';
+    link.download = filename;
     link.dispatchEvent(new MouseEvent('click'));
 
     URL.revokeObjectURL(pdfURL);
@@ -242,7 +244,7 @@
 	>
 		{#if !isDownloading}<DownloadIcon size={20} /><span>download pdf version</span>{/if}
 		{#if isDownloading}
-			<DownloadIconAnimated
+			<LottiePlayer
 				width={20}
 				speed={2}
 				src="https://assets4.lottiefiles.com/packages/lf20_KlhrNc.json"
