@@ -7,6 +7,7 @@
         - "main"
       paths-ignore: 
         - ".github/workflows/fito-deploy-on-pull-request.yml"
+        - "./**/*.md"
   concurrency: 
     group: "${{ github.workflow }}-${{ github.ref }}"
     cancel-in-progress: false
@@ -80,7 +81,7 @@
             key: "${{ github.sha }}-cache"
         - 
           name: "Build docker image"
-          run: "wget https://statics.dimaslz.dev/fito/docker/dockerfile-simple-node.docker.tmpl -O Dockerfile.tmpl\n    export NODE_IMAGE=\"16.19.0-alpine\"\n    export ARGS=\"\"\n    export RUN_COMMAND=\"\\\"yarn\\\", \\\"start\\\"\"\n    export SOURCE=\"build\"\n    export FILES=\"COPY node_modules /app/node_modules\nCOPY package.json /app/package.json\nCOPY static /app/static\"\n    envsubst < Dockerfile.tmpl > Dockerfile\n    docker build .  -t ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image"
+          run: "docker build . --file Dockerfile  -t ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image"
         - 
           name: "prepare connection"
           run: "mkdir -p ~/.ssh/\necho \"$SSH_KEY\" > ~/.ssh/prod.key\nchmod 600 ~/.ssh/prod.key\ncat >>~/.ssh/config <<END\nHost prod\n  HostName $SSH_HOST\n  User $SSH_USER\n  IdentityFile ~/.ssh/prod.key\n  StrictHostKeyChecking no\nEND"
@@ -131,7 +132,7 @@
           run: "echo \"container is not running\" && exit 1"
         - 
           name: "setup nginx config"
-          run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx.tmpl -O nginx.tmpl\nexport SERVER_NAME=\"cv.dimaslz.dev\"\nexport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\nenvsubst < nginx.tmpl > cv.dimaslz.dev\nscp cv.dimaslz.dev prod:/etc/nginx/sites-enabled/cv.dimaslz.dev\nssh prod \"nginx -t && systemctl restart nginx\""
+          run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx.tmpl -O nginx.tmpl\n\texport SERVER_NAME=\"cv.dimaslz.dev\"\n\texport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\n\tenvsubst < nginx.tmpl > cv.dimaslz.dev\n\tscp cv.dimaslz.dev prod:/etc/nginx/sites-enabled/cv.dimaslz.dev\n\tssh prod \"nginx -t && systemctl restart nginx\""
         - 
           name: "Container is not running"
           if: "${{ failure() }}"
