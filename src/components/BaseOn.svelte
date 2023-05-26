@@ -3,7 +3,5 @@
 </script>
 
 <div>
-	<span>
-		{data.city}, {data.country}
-	</span>
+	{data.city}, {data.country} {#if data.mode} ({data.mode}){/if}
 </div>
