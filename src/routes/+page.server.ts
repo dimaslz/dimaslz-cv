@@ -1,8 +1,8 @@
-import { API_DIMASLZ_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
-	const data = await fetch(API_DIMASLZ_URL)
+	const data = await fetch(env.API_DIMASLZ_URL)
 		.then((data) => data.json())
 		.catch(() => ({}));
 

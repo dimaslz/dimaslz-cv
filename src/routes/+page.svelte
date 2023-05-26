@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { BaseOn, Date } from "@/components";
-	import { DownloadIcon, LottiePlayer } from "@/components/icons";
+	import { BaseOn, Date, LottiePlayer } from "@/components";
+	import { DownloadIcon } from "@/components/icons";
 
 	export let data: any;
 
