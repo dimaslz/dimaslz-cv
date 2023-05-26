@@ -239,7 +239,7 @@
 			"fixed top-4 right-4 flex text-sm p-2 space-x-2 items-center",
 			isDownloading
 				? "bg-slate-50 text-slate-400 cursor-not-allowed"
-				: "bg-slate-100 hover:bg-slate-200 text-slate-600",
+				: "download-pdf-animation bg-slate-100 hover:bg-slate-200 text-slate-600",
 		].join(" ")}
 	>
 		{#if !isDownloading}<DownloadIcon size={20} /><span>download pdf version</span>{/if}
@@ -253,4 +253,12 @@
 			<span>downloading...</span>
 		{/if}
 	</button>
+{/if}
+
+{#if !isPDFVersion}
+<div class="fixed p-4 bottom-0 right-0 flex">
+	<a href="https://github.com/dimaslz" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">gh</a>
+	<a href="https://www.linkedin.com/in/dimaslopezzurita" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">in</a>
+	<a href="https://twitter.com/dimaslz" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">tw</a>
+</div>
 {/if}
