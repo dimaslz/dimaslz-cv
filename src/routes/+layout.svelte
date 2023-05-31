@@ -22,8 +22,8 @@
 
 	{#if !isPDFVersion}
 		<footer>
-			<p class="text-xs p-4 text-gray-600">
-				building my resume to play with <span class="text-orange-400">svelte</span> | <a href="https://twitter.com/dimaslz" class="text-blue-400" target="_blank" rel="noreferrer">@dimaslz</a></p>
+			<p class="text-sm p-4 text-gray-600">
+				built with ♥️ from Barcelona with <a href="https://kit.svelte.dev/" target="_blank" class="text-orange-600 hover:text-orange-800" rel="noreferrer">svelte</a> | <a href="https://twitter.com/dimaslz" class="text-blue-600 hover:text-blue-800" target="_blank" rel="noreferrer">@dimaslz</a></p>
 		</footer>
 	{/if}
 </div>
