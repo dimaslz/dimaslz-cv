@@ -120,7 +120,7 @@
 			</span>
 		</h1>
 		<div class="flex flex-row w-full">
-			<div class="text-sm uppercase text-slate-500 font-roboto font-light flex">{cvData?.title}</div>
+			<div class="text-sm uppercase text-gray-500 font-roboto font-light flex">{cvData?.title}</div>
 			<div class="w-full flex items-end justify-end font-light text-xs flex-1">
 				{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
 			</div>
@@ -139,7 +139,7 @@
 				<h3 class="text-base font-bold w-full">
 					{job.title} {#if job.company}<span>at {job.company}</span>{/if}
 				</h3>
-				<div class="text-xs uppercase text-gray-400 flex space-x-1 w-full">
+				<div class="text-xs uppercase text-gray-500 flex space-x-1 w-full">
 					<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
 				</div>
 				<div class="h-2"></div>
@@ -151,7 +151,7 @@
 		<h2 class="text-2xl font-ropa-sans w-full">Education</h2>
 		{#each cvData?.education as education}
 			<h3 class="text-base font-bold w-full">{education.title}</h3>
-			<div class="text-xs uppercase text-slate-400 flex space-x-1 w-full">
+			<div class="text-xs uppercase text-gray-500 flex space-x-1 w-full">
 				<Date date={education.date} /> <span>-</span> <BaseOn data={education.baseOn} />
 			</div>
 			<div class="h-2"></div>
@@ -170,7 +170,7 @@
 			</h1>
 		</div>
 		<div class="flex flex-row">
-			<div class="text-sm uppercase text-slate-500 font-roboto font-light flex">{cvData?.title}</div>
+			<div class="text-sm uppercase text-gray-500 font-roboto font-light flex">{cvData?.title}</div>
 			<div class="w-full flex items-end justify-end font-light text-xs flex-1">
 				{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
 			</div>
@@ -191,7 +191,7 @@
 						<h3 class="text-base font-bold">
 							{job.title} {#if job.company}<span>at {job.company}</span>{/if}
 						</h3>
-						<div class="text-xs uppercase text-gray-400 flex space-x-1">
+						<div class="text-xs uppercase text-gray-500 flex space-x-1">
 							<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
 						</div>
 						<div class="mt-2 text-xs">{@html renderDescription(job.description)}</div>
@@ -207,7 +207,7 @@
 			{#each cvData?.education as education}
 				<li>
 					<h3 class="text-base font-bold">{education.title}</h3>
-					<div class="text-xs uppercase text-slate-400 flex space-x-1">
+					<div class="text-xs uppercase text-gray-500 flex space-x-1">
 						<Date date={education.date} /> <span>-</span> <BaseOn data={education.baseOn} />
 					</div>
 					<div class="mt-2 text-xs">{education.description}</div>
