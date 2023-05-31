@@ -7,7 +7,7 @@
         - "main"
       paths-ignore: 
         - ".github/workflows/fito-deploy-on-pull-request.yml"
-        - "./**/*.md"
+        - "**/*.md"
   concurrency: 
     group: "${{ github.workflow }}-${{ github.ref }}"
     cancel-in-progress: false
