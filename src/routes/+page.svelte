@@ -122,7 +122,7 @@
 		<div class="flex flex-row w-full">
 			<div class="text-sm uppercase text-slate-500 font-roboto font-light flex">{cvData?.title}</div>
 			<div class="w-full flex items-end justify-end font-light text-xs flex-1">
-				{cvData.baseOn.city}, {cvData.baseOn.country} - {cvData.phone} - {cvData.email}
+				{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
 			</div>
 		</div>
 
@@ -172,7 +172,7 @@
 		<div class="flex flex-row">
 			<div class="text-sm uppercase text-slate-500 font-roboto font-light flex">{cvData?.title}</div>
 			<div class="w-full flex items-end justify-end font-light text-xs flex-1">
-				{cvData.baseOn.city}, {cvData.baseOn.country} - {cvData.phone} - {cvData.email}
+				{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
 			</div>
 		</div>
 	</div>

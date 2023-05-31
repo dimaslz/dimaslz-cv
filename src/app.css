@@ -1,11 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&family=Ropa+Sans&display=swap');
-
 @tailwind base;
-@tailwind components;
+/* @tailwind components; */
 @tailwind utilities;
 
 body, html {
 	@apply h-auto flex min-h-full justify-center;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Ropa Sans';
+  src: url('/fonts/RopaSans-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
 }
 
 .font-ropa-sans {
