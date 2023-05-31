@@ -9,8 +9,6 @@ Live here: [https://cv.dimaslz.dev](https://cv.dimaslz.dev)
 ## Lighthouse metrics
 
 <img src="cv-dimaslz-web-vitals-screenshot.png" alt="Lighthouse metrics" style="display: block; margin: 0 auto" />
-
-
 ## Author
 
 ```json
