@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { BaseOn, Date, LottiePlayer } from "@/components";
+	import { LottiePlayer } from "@/components";
 	import { DownloadIcon } from "@/components/icons";
 
 	export let data: any;
@@ -17,7 +17,7 @@
 		const pdf: any = await fetch('/api/generate-pdf', {
 			method: 'POST',
 			body: JSON.stringify({
-				url: location.origin,
+				url: location.href,
 			})
 		})
 			.then(data => data.blob())
@@ -25,7 +25,7 @@
 		const pdfURL = URL.createObjectURL(pdf);
 
 		const currentYear: number = (new window.Date()).getFullYear();
-		const filename = `dimas-lopez-zurita-resume-${currentYear}.pdf`
+		const filename = `dimas-lopez-zurita-cover-letter-${currentYear}.pdf`
     const link = document.createElement('a');
     link.href = pdfURL;
     link.download = filename;
@@ -41,7 +41,7 @@
 	}
 
 	const renderDescriptionPDF = (value: string) => {
-		return value.split("\n")
+		return value.replace("\n\n", "\n").split("\n")
 			.map(l => {
 				if (l) {
 					return `<div class="w-full text-xs">${l}</div>`
@@ -81,6 +81,7 @@
 		loop(elements);
 
 		const section = document.querySelector("section");
+		const pageSize = section?.clientHeight || 0;
 		const classes = section?.className;
 		if (section) {
 			document.querySelector("main")?.removeChild(section);
@@ -93,21 +94,25 @@
 
 		const restSize = 1040 - firstPageSize
 
+		console.log("restSize", { restSize, firstPageSize})
 		elements.forEach(e => {
 			newSection.append(e);
 		});
 
 		const spaceElement = document.createElement('div');
-		spaceElement.style.minHeight = `${(restSize/10) + 4.8}rem`;
-		spaceElement.style.height = `${restSize/10 + 4.8}rem`;
-		newSection.append(spaceElement)
+		console.log("firstPageSize", pageSize)
+		if (pageSize > 1040) {
+			spaceElement.style.minHeight = `${(restSize/10) + 4.8}rem`;
+			spaceElement.style.height = `${restSize/10 + 4.8}rem`;
+			newSection.append(spaceElement)
+		}
 
 		container.reverse().forEach(e => {
 			newSection.append(e);
 		})
 
 		document.querySelector("main")?.append(newSection);
-	})
+	});
 
 </script>
 
@@ -127,36 +132,9 @@
 		</div>
 
 		<div class="h-6"></div>
-		<h2 class="text-2xl font-ropa-sans w-full">Profile</h2>
+		<h2 class="text-2xl font-ropa-sans w-full">Cover Letter</h2>
 		<div class="h-2"></div>
-		<p class="text-xs">{@html renderDescriptionPDF(cvData?.introduction)}</p>
-
-		<div class="h-6"></div>
-		<h2 class="text-2xl font-ropa-sans w-full">Employment History</h2>
-		{#if cvData?.jobs?.length}
-			{#each cvData?.jobs as job}
-				<div class="h-4"></div>
-				<h3 class="text-base font-bold w-full">
-					{job.title} {#if job.company}<span>at {job.company}</span>{/if}
-				</h3>
-				<div class="text-xs uppercase text-gray-400 flex space-x-1 w-full">
-					<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
-				</div>
-				<div class="h-2"></div>
-				{@html renderDescriptionPDF(job.description)}
-			{/each}
-		{/if}
-
-		<div class="h-6"></div>
-		<h2 class="text-2xl font-ropa-sans w-full">Education</h2>
-		{#each cvData?.education as education}
-			<h3 class="text-base font-bold w-full">{education.title}</h3>
-			<div class="text-xs uppercase text-slate-400 flex space-x-1 w-full">
-				<Date date={education.date} /> <span>-</span> <BaseOn data={education.baseOn} />
-			</div>
-			<div class="h-2"></div>
-			<div class="text-xs w-full">{education.description}</div>
-		{/each}
+		<p class="text-xs">{@html renderDescriptionPDF(cvData?.coverLetter)}</p>
 	{/if}
 
 	{#if !isPDFVersion}
@@ -178,42 +156,8 @@
 	</div>
 
 	<div class="mt-6">
-		<h2 class="text-2xl font-ropa-sans">Profile</h2>
-		<p class="text-xs mt-2">{@html renderDescription(cvData?.introduction)}</p>
-	</div>
-
-	<div class="mt-6">
-		<h2 class="text-2xl font-ropa-sans">Employment History</h2>
-		{#if cvData?.jobs?.length}
-			<ul class="mt-2 space-y-4">
-				{#each cvData?.jobs as job}
-					<li>
-						<h3 class="text-base font-bold">
-							{job.title} {#if job.company}<span>at {job.company}</span>{/if}
-						</h3>
-						<div class="text-xs uppercase text-gray-400 flex space-x-1">
-							<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
-						</div>
-						<div class="mt-2 text-xs">{@html renderDescription(job.description)}</div>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
-
-	<div class="w-full mt-6">
-		<h2 class="text-2xl font-ropa-sans">Education</h2>
-		<ul class="mt-2 space-y-4">
-			{#each cvData?.education as education}
-				<li>
-					<h3 class="text-base font-bold">{education.title}</h3>
-					<div class="text-xs uppercase text-slate-400 flex space-x-1">
-						<Date date={education.date} /> <span>-</span> <BaseOn data={education.baseOn} />
-					</div>
-					<div class="mt-2 text-xs">{education.description}</div>
-				</li>
-			{/each}
-		</ul>
+		<h2 class="text-2xl font-ropa-sans">Cover Letter</h2>
+		<p class="text-xs mt-2">{@html renderDescription(cvData?.coverLetter)}</p>
 	</div>
 	{/if}
 </section>

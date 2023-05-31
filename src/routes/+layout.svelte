@@ -7,10 +7,16 @@
 	const isPDFVersion = data.layout.isPdf || false;
 </script>
 
+<svelte:head>
+	<title>Dimas López resume - @dimaslz</title>
+	<meta name="description" content="Dimas López resume - @dimaslz" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</svelte:head>
+
 <div class="flex flex-col h-full items-center px-4">
 	<Header />
 
-	<main class="h-full w-full flex justify-center">
+	<main class={[!isPDFVersion ? "h-full" : "", "w-full flex justify-center"].join(" ")}>
 		<slot />
 	</main>
 

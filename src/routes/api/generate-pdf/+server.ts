@@ -1,7 +1,7 @@
 import puppeteer, { type PaperFormat } from "puppeteer";
 import type { RequestHandler } from "./$types";
 
-const PDF_WIDTH = 793; // 793
+const PDF_WIDTH = 793;
 
 type Params = {
 	url: string;
@@ -29,11 +29,16 @@ async function printPDF(
 	});
 
 	const maxWidth = PDF_WIDTH;
+	const height = await page.evaluate(
+		() => document.documentElement.offsetHeight
+	);
+
+	const numberOfPages = Math.ceil(height / 1040);
 	const pdf = await page.pdf({
 		printBackground: true,
 		width: maxWidth,
 		format,
-		pageRanges: "1, 1-2"
+		pageRanges: Array.from(new Array(numberOfPages)).map((_, key) => key + 1).join(","),
 	});
 
 	await browser.close();
