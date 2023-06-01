@@ -147,9 +147,9 @@
 				</span>
 			</h1>
 		</div>
-		<div class="flex flex-row">
+		<div class="flex flex-col sm:flex-row">
 			<div class="text-sm uppercase text-slate-500 font-roboto font-light flex">{cvData?.title}</div>
-			<div class="w-full flex items-end justify-end font-light text-xs flex-1">
+			<div class="w-full flex items-end justify-end font-light text-xs flex-1 mt-4 sm:mt-0">
 				{cvData.baseOn.city}, {cvData.baseOn.country} - {cvData.phone} - {cvData.email}
 			</div>
 		</div>
@@ -163,6 +163,13 @@
 </section>
 
 {#if !isPDFVersion}
+	<a
+		href="/"
+		class="fixed top-4 left-4 flex text-sm p-2 space-x-2 items-center bg-slate-100 hover:bg-slate-200 text-slate-600 "
+	>
+		check my resumé
+	</a>
+
 	<button
 		on:click={downloadPdf}
 		disabled={isDownloading}
@@ -184,12 +191,4 @@
 			<span>downloading...</span>
 		{/if}
 	</button>
-{/if}
-
-{#if !isPDFVersion}
-<div class="fixed p-4 bottom-0 right-0 flex">
-	<a href="https://github.com/dimaslz" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">gh</a>
-	<a href="https://www.linkedin.com/in/dimaslopezzurita" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">in</a>
-	<a href="https://twitter.com/dimaslz" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">tw</a>
-</div>
 {/if}

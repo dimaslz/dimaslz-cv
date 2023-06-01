@@ -74,8 +74,23 @@
 		}
 	}
 
+	let showButtons = false;
+	const onScrollHandler = ($event: Event) => {
+		console.log("onScrollHandler", $event)
+
+		showButtons = document.body.scrollTop > 150 ||
+    document.documentElement.scrollTop > 150;
+	}
+
 	onMount(async () => {
-		if (!isPDFVersion) return;
+
+		if (!isPDFVersion) {
+			document.addEventListener("scroll", onScrollHandler);
+
+			return () => {
+				document.removeEventListener("scroll", onScrollHandler);
+			}
+		};
 
 		const elements = [...document.querySelectorAll("section > *")];
 		loop(elements);
@@ -107,7 +122,7 @@
 		})
 
 		document.querySelector("main")?.append(newSection);
-	})
+	});
 
 </script>
 
@@ -169,9 +184,9 @@
 				</span>
 			</h1>
 		</div>
-		<div class="flex flex-row">
+		<div class="flex flex-col sm:flex-row">
 			<div class="text-sm uppercase text-gray-500 font-roboto font-light flex">{cvData?.title}</div>
-			<div class="w-full flex items-end justify-end font-light text-xs flex-1">
+			<div class="w-full flex items-end justify-end font-light text-xs flex-1 mt-4 sm:mt-0">
 				{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
 			</div>
 		</div>
@@ -219,33 +234,40 @@
 </section>
 
 {#if !isPDFVersion}
-	<button
-		on:click={downloadPdf}
-		disabled={isDownloading}
-		class={[
-			"fixed top-4 right-4 flex text-sm p-2 space-x-2 items-center",
-			isDownloading
-				? "bg-slate-50 text-slate-400 cursor-not-allowed"
-				: "download-pdf-animation bg-slate-100 hover:bg-slate-200 text-slate-600",
-		].join(" ")}
-	>
-		{#if !isDownloading}<DownloadIcon size={20} /><span>download pdf version</span>{/if}
-		{#if isDownloading}
-			<LottiePlayer
-				width={20}
-				speed={2}
-				src="https://assets4.lottiefiles.com/packages/lf20_KlhrNc.json"
-				play={true}
-			/>
-			<span>downloading...</span>
-		{/if}
-	</button>
-{/if}
+	<div>
+		<a
+			href="/cover-letter"
+			class={[
+				showButtons ? "top-4" : "",
+				!showButtons ? "-top-10" : "",
+				"fixed transition-all delay-150 duration-500 left-4 flex text-sm p-2 space-x-2 items-center bg-slate-100 hover:bg-slate-200 text-slate-600"
+			].join(" ")}
+		>
+			check my cover letter
+		</a>
 
-{#if !isPDFVersion}
-<div class="fixed p-4 bottom-0 right-0 flex">
-	<a href="https://github.com/dimaslz" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">gh</a>
-	<a href="https://www.linkedin.com/in/dimaslopezzurita" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">in</a>
-	<a href="https://twitter.com/dimaslz" class="p-2 text-sm hover:opacity-60 hover:bg-slate-100">tw</a>
-</div>
+		<button
+			on:click={downloadPdf}
+			disabled={isDownloading}
+			class={[
+				showButtons ? "top-4" : "",
+				!showButtons ? "-top-10" : "",
+				"fixed transition-all delay-150 duration-500 right-4 flex text-sm p-2 space-x-2 items-center",
+				isDownloading
+					? "bg-slate-50 text-slate-400 cursor-not-allowed"
+					: "download-pdf-animation bg-slate-100 hover:bg-slate-200 text-slate-600",
+			].join(" ")}
+		>
+			{#if !isDownloading}<DownloadIcon size={20} /><span>download pdf version</span>{/if}
+			{#if isDownloading}
+				<LottiePlayer
+					width={20}
+					speed={2}
+					src="https://assets4.lottiefiles.com/packages/lf20_KlhrNc.json"
+					play={true}
+				/>
+				<span>downloading...</span>
+			{/if}
+		</button>
+	</div>
 {/if}
