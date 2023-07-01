@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { BaseOn, Date, LottiePlayer } from "@/components";
 	import { DownloadIcon } from "@/components/icons";
+	import { CV_WIDTH } from "@/constants";
 
 	export let data: any;
 
@@ -20,12 +21,12 @@
 				url: location.origin,
 			})
 		})
-			.then(data => data.blob())
+			.then(data => data.blob());
 
 		const pdfURL = URL.createObjectURL(pdf);
 
 		const currentYear: number = (new window.Date()).getFullYear();
-		const filename = `dimas-lopez-zurita-resume-${currentYear}.pdf`
+		const filename = `dimas-lopez-zurita-resume-${currentYear}.pdf`;
     const link = document.createElement('a');
     link.href = pdfURL;
     link.download = filename;
@@ -75,20 +76,32 @@
 	}
 
 	let showButtons = false;
-	const onScrollHandler = ($event: Event) => {
-		console.log("onScrollHandler", $event)
+	let isLessThanCV = false;
 
-		showButtons = document.body.scrollTop > 150 ||
-    document.documentElement.scrollTop > 150;
+	const widthIsLessThanCV = () => (
+		document.documentElement.offsetWidth < CV_WIDTH
+	);
+
+	const onScrollHandler = () => {
+		showButtons = isLessThanCV && (
+			document.body.scrollTop > 150 || document.documentElement.scrollTop > 150
+		);
+	}
+
+	const onResizeHandler = () => {
+		isLessThanCV = widthIsLessThanCV();
 	}
 
 	onMount(async () => {
-
 		if (!isPDFVersion) {
+			isLessThanCV = widthIsLessThanCV();
+
 			document.addEventListener("scroll", onScrollHandler);
+			window.addEventListener("resize", onResizeHandler);
 
 			return () => {
 				document.removeEventListener("scroll", onScrollHandler);
+				window.removeEventListener("resize", onResizeHandler);
 			}
 		};
 
@@ -238,8 +251,8 @@
 		<a
 			href="/cover-letter"
 			class={[
-				showButtons ? "top-4" : "",
-				!showButtons ? "-top-10" : "",
+				!isLessThanCV || showButtons ? "top-4" : "",
+				isLessThanCV && !showButtons ? "-top-10" : "",
 				"fixed transition-all delay-150 duration-500 left-4 flex text-sm p-2 space-x-2 items-center bg-slate-100 hover:bg-slate-200 text-slate-600"
 			].join(" ")}
 		>
@@ -250,8 +263,8 @@
 			on:click={downloadPdf}
 			disabled={isDownloading}
 			class={[
-				showButtons ? "top-4" : "",
-				!showButtons ? "-top-10" : "",
+				!isLessThanCV || showButtons ? "top-4" : "",
+				isLessThanCV && !showButtons ? "-top-10" : "",
 				"fixed transition-all delay-150 duration-500 right-4 flex text-sm p-2 space-x-2 items-center",
 				isDownloading
 					? "bg-slate-50 text-slate-400 cursor-not-allowed"

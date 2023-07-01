@@ -6,8 +6,8 @@ const config: UserConfig = {
 	plugins: [sveltekit()],
 	resolve: {
 		alias: {
-			"~": path.resolve(__dirname),
 			"@": path.resolve(__dirname, "src"),
+			"~": path.resolve(__dirname),
 		},
 	},
 };

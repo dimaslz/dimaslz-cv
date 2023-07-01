@@ -1,7 +1,8 @@
 import puppeteer, { type PaperFormat } from "puppeteer";
 import type { RequestHandler } from "./$types";
+import { CV_WIDTH } from "@/constants";
 
-const PDF_WIDTH = 793;
+const PDF_WIDTH = CV_WIDTH;
 
 type Params = {
 	url: string;
@@ -46,12 +47,14 @@ async function printPDF(
 }
 
 
-export const POST = async ({ request }: { request: RequestHandler }) => {
+export const POST: RequestHandler = async ({ request }) => {
 	const { url } = await request.json();
 
 	const pdfFile = await printPDF({ url: `${url}?pdf` }).then(pdf => {
 		return pdf;
 	});
+
+	const currentYear: number = (new window.Date()).getFullYear();
 
 	return new Response(
 		pdfFile,
@@ -59,7 +62,7 @@ export const POST = async ({ request }: { request: RequestHandler }) => {
 			status: 200,
 			headers: {
 				'Content-Type': 'application/pdf',
-				'Content-Disposition': 'attachment; filename=dummy.pdf'
+				'Content-Disposition': `attachment; filename=dimas-lopez-zurita-resume-${currentYear}.pdf`
 			}
 		}
 	)
