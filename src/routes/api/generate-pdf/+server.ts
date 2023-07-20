@@ -54,7 +54,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		return pdf;
 	});
 
-	const currentYear: number = (new window.Date()).getFullYear();
+	const currentYear: number = (new Date()).getFullYear();
 
 	return new Response(
 		pdfFile,
