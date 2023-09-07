@@ -84,7 +84,7 @@
             key: "${{ github.sha }}-cache"
         - 
           name: "Build docker image"
-          run: "docker build . --file Dockerfile --build-arg PORT=\"${{secrets.FITO_ENV_PORT}}\" --build-arg API_DIMASLZ_URL=\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\" -t ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image"
+          run: "docker build . --file Dockerfile --build-arg PORT=\"${{secrets.FITO_ENV_PORT}}\" --build-arg API_DIMASLZ_URL=\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\" --build-arg PORT=\"${{secrets.FITO_ENV_PORT}}\" -t ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image"
         - 
           name: "prepare connection"
           run: "mkdir -p ~/.ssh/\necho \"$SSH_KEY\" > ~/.ssh/prod.key\nchmod 600 ~/.ssh/prod.key\ncat >>~/.ssh/config <<END\nHost prod\n  HostName $SSH_HOST\n  User $SSH_USER\n  IdentityFile ~/.ssh/prod.key\n  StrictHostKeyChecking no\nEND"
@@ -122,7 +122,7 @@
           run: "currentImageId=`ssh prod \"docker images --format=\\\"{{.Repository}} {{.ID}}\\\" | grep \\\"_cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentImageId=`echo $currentImageId | grep -Po \"\\s(.*?$)\" | tr -d \"\\n\" || echo \"\"` && echo \"currentImageId=$currentImageId\" >> $GITHUB_ENV"
         - 
           name: "run"
-          run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_container -e PORT=\\\"${{secrets.FITO_ENV_PORT}}\\\" -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -p 3000 -d ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image\"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
+          run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_container -e PORT=\\\"${{secrets.FITO_ENV_PORT}}\\\" -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -e PORT=\\\"${{secrets.FITO_ENV_PORT}}\\\" -p 3000 -d ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image\"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
         - 
           name: "get container IP"
           run: "newContainerIP=`ssh prod \"docker inspect -f \\\"{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}\\\" ${{ env.newContainerID }}\"` && echo \"newContainerIP=$newContainerIP\" >> $GITHUB_ENV"
