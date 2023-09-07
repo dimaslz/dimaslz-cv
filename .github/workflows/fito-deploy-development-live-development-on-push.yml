@@ -115,13 +115,10 @@
           run: "mkdir -p ~/.ssh/\necho \"$SSH_KEY\" > ~/.ssh/prod.key\nchmod 600 ~/.ssh/prod.key\ncat >>~/.ssh/config <<END\nHost prod\n  HostName $SSH_HOST\n  User $SSH_USER\n  IdentityFile ~/.ssh/prod.key\n  StrictHostKeyChecking no\nEND"
         - 
           name: "get current currentContainerId"
-          run: "currentContainerId=`ssh prod \"docker ps --format=\\\"{{.Names}} {{.ID}}\\\" | grep \\\"dev-cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentContainerId=`echo $currentContainerId | grep -Po \"\\s.*?$\" | tr -d \"\\n\" || echo \"\"` && echo \"currentContainerId=$currentContainerId\" >> $GITHUB_ENV"
+          run: "currentContainerId=`ssh prod \"docker ps --format=\\\"{{.Names}} {{.ID}}\\\" | grep \\\"_dev-cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentContainerId=`echo $currentContainerId | grep -Po \"\\s.*?$\" | tr -d \"\\n\" || echo \"\"` && echo \"currentContainerId=$currentContainerId\" >> $GITHUB_ENV"
         - 
           name: "get current currentImageId"
-          run: "currentImageId=`ssh prod \"docker images --format=\\\"{{.Repository}} {{.ID}}\\\" | grep \\\"dev-cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentImageId=`echo $currentImageId | grep -Po \"\\s(.*?$)\" | tr -d \"\\n\" || echo \"\"` && echo \"currentImageId=$currentImageId\" >> $GITHUB_ENV"
-        - 
-          name: "get current currentContainerGithubHash"
-          run: "currentContainerGithubHash=`ssh prod \"docker ps --format=\\\"{{.Names}} {{.ID}}\\\" | grep \\\"dev-cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentContainerGithubHash=`echo $currentContainerGithubHash | grep -Po \"^.+?\\.\" || echo \"\"` && echo \"currentContainerGithubHash=$currentContainerGithubHash\" >> $GITHUB_ENV"
+          run: "currentImageId=`ssh prod \"docker images --format=\\\"{{.Repository}} {{.ID}}\\\" | grep \\\"_dev-cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentImageId=`echo $currentImageId | grep -Po \"\\s(.*?$)\" | tr -d \"\\n\" || echo \"\"` && echo \"currentImageId=$currentImageId\" >> $GITHUB_ENV"
         - 
           name: "run"
           run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_dev-cv.dimaslz.dev_development_container -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -p 3000 -d ${{ env.ATTEMPTS }}_${{ github.sha }}_dev-cv.dimaslz.dev_development_image\"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
