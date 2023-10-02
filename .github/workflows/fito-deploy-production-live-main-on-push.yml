@@ -121,7 +121,7 @@
           run: "currentImageId=`ssh prod \"docker images --format=\\\"{{.Repository}} {{.ID}}\\\" | grep \\\"_cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentImageId=`echo $currentImageId | grep -Po \"\\s(.*?$)\" | tr -d \"\\n\" || echo \"\"` && echo \"currentImageId=$currentImageId\" >> $GITHUB_ENV"
         - 
           name: "run"
-          run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_container -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -p 3000 -d ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image\"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
+          run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_container -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -d ${{ env.ATTEMPTS }}_${{ github.sha }}_cv.dimaslz.dev_production_image\"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
         - 
           name: "get container IP"
           run: "newContainerIP=`ssh prod \"docker inspect -f \\\"{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}\\\" ${{ env.newContainerID }}\"` && echo \"newContainerIP=$newContainerIP\" >> $GITHUB_ENV"
