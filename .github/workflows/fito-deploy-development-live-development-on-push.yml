@@ -23,12 +23,12 @@
       steps: 
         - 
           name: "Checkout under $GITHUB_WORKSPACE"
-          uses: "actions/checkout@master"
+          uses: "actions/checkout@v4"
           with: 
             ref: "development"
         - 
           name: "Set up NodeJS"
-          uses: "actions/setup-node@master"
+          uses: "actions/setup-node@v3"
           with: 
             node-version: "18.17"
         - 
@@ -39,7 +39,7 @@
           run: "yarn install"
         - 
           name: "Cache"
-          uses: "actions/cache@main"
+          uses: "actions/cache@v3"
           with: 
             path: "./*"
             key: "${{ github.sha }}-cache"
@@ -49,24 +49,22 @@
       needs: "install-dependencies"
       steps: 
         - 
-          name: "Set up NodeJS"
-          uses: "actions/setup-node@master"
-          with: 
-            node-version: "18.17"
-        - 
           name: "Cache"
-          uses: "actions/cache@main"
+          uses: "actions/cache@v3"
           with: 
             path: "./*"
             key: "${{ github.sha }}-cache"
         - 
+          name: "Set up NodeJS"
+          uses: "actions/setup-node@v3"
+          with: 
+            node-version: "18.17"
+        - 
           name: "Build application"
           run: "yarn build"
-          env: 
-            API_DIMASLZ_URL: "${{secrets.FITO_ENV_API_DIMASLZ_URL}}"
         - 
           name: "Cache"
-          uses: "actions/cache@main"
+          uses: "actions/cache@v3"
           with: 
             path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
             key: "${{ github.sha }}-cache"
@@ -77,7 +75,7 @@
       steps: 
         - 
           name: "Cache"
-          uses: "actions/cache@main"
+          uses: "actions/cache@v3"
           with: 
             path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
             key: "${{ github.sha }}-cache"
@@ -89,7 +87,7 @@
           run: "mkdir -p ~/.ssh/\necho \"$SSH_KEY\" > ~/.ssh/prod.key\nchmod 600 ~/.ssh/prod.key\ncat >>~/.ssh/config <<END\nHost prod\n  HostName $SSH_HOST\n  User $SSH_USER\n  IdentityFile ~/.ssh/prod.key\n  StrictHostKeyChecking no\nEND"
         - 
           name: "Cache"
-          uses: "actions/cache@main"
+          uses: "actions/cache@v3"
           with: 
             path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
             key: "${{ github.sha }}-cache"
@@ -106,7 +104,7 @@
       steps: 
         - 
           name: "Cache"
-          uses: "actions/cache@main"
+          uses: "actions/cache@v3"
           with: 
             path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
             key: "${{ github.sha }}-cache"
@@ -121,7 +119,7 @@
           run: "currentImageId=`ssh prod \"docker images --format=\\\"{{.Repository}} {{.ID}}\\\" | grep \\\"_dev-cv.dimaslz.dev\\\" || echo \\\"\\\"\"` && currentImageId=`echo $currentImageId | grep -Po \"\\s(.*?$)\" | tr -d \"\\n\" || echo \"\"` && echo \"currentImageId=$currentImageId\" >> $GITHUB_ENV"
         - 
           name: "run"
-          run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_dev-cv.dimaslz.dev_development_container -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -d ${{ env.ATTEMPTS }}_${{ github.sha }}_dev-cv.dimaslz.dev_development_image\"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
+          run: "newContainerID=`ssh prod \"docker run --name ${{ env.ATTEMPTS }}_${{ github.sha }}_dev-cv.dimaslz.dev_development_container -e API_DIMASLZ_URL=\\\"${{secrets.FITO_ENV_API_DIMASLZ_URL}}\\\" -d ${{ env.ATTEMPTS }}_${{ github.sha }}_dev-cv.dimaslz.dev_development_image \"` && echo \"newContainerID=$newContainerID\" >> $GITHUB_ENV"
         - 
           name: "get container IP"
           run: "newContainerIP=`ssh prod \"docker inspect -f \\\"{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}\\\" ${{ env.newContainerID }}\"` && echo \"newContainerIP=$newContainerIP\" >> $GITHUB_ENV"
@@ -134,16 +132,14 @@
           run: "echo \"container is not running\" && exit 1"
         - 
           name: "setup nginx config"
-          run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx.tmpl -O nginx.tmpl\n\texport SERVER_NAME=\"dev-cv.dimaslz.dev\"\n\texport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\n\tenvsubst < nginx.tmpl > dev-cv.dimaslz.dev\n\tscp dev-cv.dimaslz.dev prod:/etc/nginx/sites-enabled/dev-cv.dimaslz.dev\n\tssh prod \"nginx -t && systemctl restart nginx\""
+          run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx-certbot-1-step.tmpl -O nginx.tmpl\n\texport SERVER_NAME=\"dev-cv.dimaslz.dev\"\n\texport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\n\tenvsubst < nginx.tmpl > dev-cv.dimaslz.dev\n\tscp dev-cv.dimaslz.dev prod:/etc/nginx/sites-enabled/dev-cv.dimaslz.dev\n\tssh prod \"nginx -t && systemctl restart nginx\""
+        - 
+          name: "create certificates"
+          run: "ssh prod \"mkdir -p /usr/share/nginx/html/dev-cv.dimaslz.dev && echo \\\"1\\\" | certbot certonly --webroot -w /usr/share/nginx/html/dev-cv.dimaslz.dev -d dev-cv.dimaslz.dev --email ${{ secrets.FITO_ENV_USER_EMAIL }} --agree-tos --no-eff-email && nginx -t && systemctl restart nginx\""
+        - 
+          name: "setup nginx config"
+          run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx-certbot-2-step.tmpl -O nginx.tmpl\n\texport SERVER_NAME=\"dev-cv.dimaslz.dev\"\n\texport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\n\tenvsubst < nginx.tmpl > dev-cv.dimaslz.dev\n\tscp dev-cv.dimaslz.dev prod:/etc/nginx/sites-enabled/dev-cv.dimaslz.dev\n\tssh prod \"nginx -t && systemctl restart nginx\""
         - 
           name: "Container is not running"
           if: "${{ failure() }}"
           run: "echo \"container is not running\" && ssh prod \"docker rm -f ${{ env.newContainerID }}\" && exit 1"
-        - 
-          name: "Delete previews containers"
-          if: "${{ success() }}"
-          run: "[ ! -z \"${{ env.currentContainerId }}\" ] && ssh prod \"docker rm -f ${{ env.currentContainerId }}\" || echo \"\""
-        - 
-          name: "Delete previews images"
-          if: "${{ success() }}"
-          run: "[ ! -z \"${{ env.currentContainerId }}\" ] && ssh prod \"docker rmi -f ${{ env.currentImageId }}\" || echo \"\""
