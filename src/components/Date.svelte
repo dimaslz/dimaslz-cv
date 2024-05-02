@@ -1,5 +1,10 @@
 <script lang="ts">
-	export let date: any;
+	import type { Date } from "@/types";
+
+	export let date: {
+		from: Date;
+		to: Date;
+	};
 </script>
 
 <div>

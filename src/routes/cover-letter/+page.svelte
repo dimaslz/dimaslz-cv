@@ -2,8 +2,17 @@
 	import { onMount } from "svelte";
 	import { LottiePlayer } from "@/components";
 	import { DownloadIcon } from "@/components/icons";
+	import type { DimaslzData } from "@/types";
 
-	export let data: any;
+	export let data: {
+		props: {
+			data: DimaslzData,
+		},
+		layout: {
+			isPdf: boolean;
+			isDownload: boolean;
+		}
+	};
 
 	const cvData = data.props.data || {};
 	const isPDFVersion = !!data.layout.isPdf;
@@ -14,7 +23,7 @@
 
 		isDownloading = true;
 
-		const pdf: any = await fetch('/api/generate-pdf', {
+		const pdf: Blob = await fetch('/api/generate-pdf', {
 			method: 'POST',
 			body: JSON.stringify({
 				url: location.href,
@@ -52,21 +61,23 @@
 			.join("");
 	}
 
-	const container: any[] = [];
+	const container: Element[] = [];
 	let firstPageSize = 0;
 
-	const getElementsSize = (elements: any[]) => {
+	const getElementsSize = (elements: Element[]) => {
 		return elements
 			.map(e => e.clientHeight)
 			.reduce((a, b) => a + b, 0);
 	};
 
-	const loop = (allElements: any) => {
+	const loop = (allElements: Element[]) => {
 		const size = getElementsSize(allElements);
 
 		if (size > 1040) {
 			const last = allElements.pop();
-			container.push(last);
+			if (last) {
+				container.push(last);
+			}
 
 			loop(allElements);
 		} else {
@@ -94,13 +105,11 @@
 
 		const restSize = 1040 - firstPageSize
 
-		console.log("restSize", { restSize, firstPageSize})
 		elements.forEach(e => {
 			newSection.append(e);
 		});
 
 		const spaceElement = document.createElement('div');
-		console.log("firstPageSize", pageSize)
 		if (pageSize > 1040) {
 			spaceElement.style.minHeight = `${(restSize/10) + 4.8}rem`;
 			spaceElement.style.height = `${restSize/10 + 4.8}rem`;

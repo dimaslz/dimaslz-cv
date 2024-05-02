@@ -1,5 +1,7 @@
 <script lang="ts">
-	export let data: any;
+	import type { BaseOn } from "@/types";
+
+	export let data: BaseOn;
 </script>
 
 <div>

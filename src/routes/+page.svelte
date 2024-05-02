@@ -3,11 +3,21 @@
 	import { BaseOn, Date, LottiePlayer } from "@/components";
 	import { DownloadIcon } from "@/components/icons";
 	import { CV_WIDTH } from "@/constants";
+	import type { DimaslzData } from "@/types";
 
-	export let data: any;
+	export let data: {
+		props: {
+			data: DimaslzData,
+		},
+		layout: {
+			isPdf: boolean;
+			isDownload: boolean;
+		}
+	};
 
 	const cvData = data.props.data || {};
 	const isPDFVersion = !!data.layout.isPdf;
+	const isDownload = !!data.layout.isDownload;
 	let isDownloading = false;
 
 	const downloadPdf = async () => {
@@ -15,7 +25,7 @@
 
 		isDownloading = true;
 
-		const pdf: any = await fetch('/api/generate-pdf', {
+		const pdf: Blob = await fetch('/api/generate-pdf', {
 			method: 'POST',
 			body: JSON.stringify({
 				url: location.origin,
@@ -53,21 +63,23 @@
 			.join("");
 	}
 
-	const container: any[] = [];
+	const container: Element[] = [];
 	let firstPageSize = 0;
 
-	const getElementsSize = (elements: any[]) => {
+	const getElementsSize = (elements: Element[]) => {
 		return elements
 			.map(e => e.clientHeight)
 			.reduce((a, b) => a + b, 0);
 	};
 
-	const loop = (allElements: any) => {
+	const loop = (allElements: Element[]) => {
 		const size = getElementsSize(allElements);
 
 		if (size > 1040) {
 			const last = allElements.pop();
-			container.push(last);
+			if (last) {
+				container.push(last);
+			}
 
 			loop(allElements);
 		} else {
@@ -92,7 +104,12 @@
 		isLessThanCV = widthIsLessThanCV();
 	}
 
-	onMount(async () => {
+	onMount(async (): Promise<any> => {
+		if (isDownload) {
+			await downloadPdf();
+			window.history.pushState({}, "", '/');
+		}
+
 		if (!isPDFVersion) {
 			isLessThanCV = widthIsLessThanCV();
 
@@ -140,6 +157,11 @@
 </script>
 
 <section id="CV" class="flex min-h-full flex-grow text-sm flex-col container max-w-[800px] items-center py-8 px-8 space-y-6-">
+	{#if isDownloading}
+		<div class="h-full w-full absolute inset-0 flex items-center justify-center z-0">
+			<div class="text-lg bg-slate-200 p-6 flex items-center justify-center transition-all delay-150 duration-500 animate-bounce">Downloading online CV in a PDF version</div>
+		</div>
+	{/if}
 	<!-- version PDF -->
 	{#if isPDFVersion}
 		<h1 class="text-4xl flex flex-col w-full font-ropa-sans md:mb-0">

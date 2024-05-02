@@ -2,7 +2,9 @@
 	import { Header } from '@/components';
 	import '../app.css';
 
-	export let data: any;
+	export let data: {
+		layout: { isPdf: boolean; }
+	};
 
 	const isPDFVersion = data.layout.isPdf || false;
 </script>
