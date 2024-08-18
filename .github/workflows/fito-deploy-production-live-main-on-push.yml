@@ -30,7 +30,7 @@
           name: "Set up NodeJS"
           uses: "actions/setup-node@v4"
           with: 
-            node-version: "18.19"
+            node-version: "22.6"
         - 
           name: "Install yarn"
           run: "npm install -g yarn"
@@ -58,7 +58,7 @@
           name: "Set up NodeJS"
           uses: "actions/setup-node@v4"
           with: 
-            node-version: "18.19"
+            node-version: "22.6"
         - 
           name: "Build application"
           run: "yarn build"
