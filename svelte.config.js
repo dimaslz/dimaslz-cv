@@ -14,7 +14,15 @@ const config = {
 			"@/*": "./src/*",
 			"~/*": "./*"
 		},
-	}
+	},
+
+	onwarn: (warning, handler) => {
+		const excludeSvelteKitFiles = warning.filename.includes(".svelte-kit");
+		const excludeNodeModulesFiles = warning.filename.startsWith("node_modules/@lottiefiles");
+
+    if (excludeSvelteKitFiles || excludeNodeModulesFiles) return;
+    handler(warning);
+  },
 };
 
 export default config;

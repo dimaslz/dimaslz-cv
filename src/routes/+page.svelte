@@ -156,12 +156,13 @@
 
 </script>
 
-<section id="CV" class="flex min-h-full flex-grow text-sm flex-col container max-w-[800px] items-center py-8 px-8 space-y-6-">
+<section id="CV" class="flex min-h-full flex-grow text-sm flex-col container max-w-[800px] items-center p-8 text-left w-full">
 	{#if isDownloading}
 		<div class="h-full w-full absolute inset-0 flex items-center justify-center z-0">
 			<div class="text-lg bg-slate-200 p-6 flex items-center justify-center transition-all delay-150 duration-500 animate-bounce">Downloading online CV in a PDF version</div>
 		</div>
 	{/if}
+
 	<!-- version PDF -->
 	{#if isPDFVersion}
 		<h1 class="text-4xl flex flex-col w-full font-ropa-sans md:mb-0">
@@ -183,17 +184,28 @@
 
 		<div class="h-6"></div>
 		<h2 class="text-2xl font-ropa-sans w-full">Employment History</h2>
+
 		{#if cvData?.jobs?.length}
 			{#each cvData?.jobs as job}
 				<div class="h-4"></div>
-				<h3 class="text-base font-bold w-full">
-					{job.title} {#if job.company}<span>at {job.company}</span>{/if}
-				</h3>
-				<div class="text-xs uppercase text-gray-500 flex space-x-1 w-full">
-					<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
-				</div>
-				<div class="h-2"></div>
-				{@html renderDescriptionPDF(job.description)}
+				{#if job.carrier}
+					<h3 class="text-base font-bold text-left w-full">{job.company}</h3>
+					{#each job.promotions as promotion}
+						<h4 class="text-sm font-bold text-left w-full border-l pl-2">{promotion.title}</h4>
+						<div class="text-xs uppercase text-gray-500 flex space-x-1 text-left w-full border-l pl-2">
+							<Date date={promotion.date} /> <span>-</span> <BaseOn data={promotion.baseOn} />
+						</div>
+						<div class="pt-2 text-xs border-l pl-2">{@html renderDescription(promotion.description)}</div>
+					{/each}
+				{:else}
+					<h3 class="text-base font-bold text-left w-full">
+						{job.title} {#if job.company}<span>at {job.company}</span>{/if}
+					</h3>
+					<div class="text-xs uppercase text-gray-500 flex space-x-1 text-left w-full">
+						<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
+					</div>
+					<div class="mt-2 text-xs">{@html renderDescription(job.description)}</div>
+				{/if}
 			{/each}
 		{/if}
 
@@ -209,62 +221,79 @@
 		{/each}
 	{/if}
 
-	{#if !isPDFVersion}
 	<!-- NORMAL -->
-	<div class="flex w-full flex-col md:flex-row-">
-		<div class="w-full">
-			<h1 class="text-4xl flex flex-col w-full font-ropa-sans md:mb-0">
-				<span>
-					{cvData?.name} {cvData?.lastname}
-				</span>
-			</h1>
-		</div>
-		<div class="flex flex-col sm:flex-row">
-			<div class="text-sm uppercase text-gray-500 font-roboto font-light flex">{cvData?.title}</div>
-			<div class="w-full flex items-end justify-end font-light text-xs flex-1 mt-4 sm:mt-0">
-				{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
+	{#if !isPDFVersion}
+		<div class="flex w-full flex-col">
+			<div class="w-full">
+				<h1 class="text-4xl flex flex-col w-full font-ropa-sans md:mb-0">
+					<span>
+						{cvData?.name} {cvData?.lastname}
+					</span>
+				</h1>
+			</div>
+			<div class="flex flex-col sm:flex-row">
+				<div class="text-sm uppercase text-gray-500 font-roboto font-light flex">{cvData?.title}</div>
+				<div class="w-full flex items-end justify-end font-light text-xs flex-1 mt-4 sm:mt-0 leading-5">
+					{cvData?.baseOn?.city}, {cvData?.baseOn?.country} - {cvData?.phone} - {cvData?.email}
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="mt-6">
-		<h2 class="text-2xl font-ropa-sans">Profile</h2>
-		<p class="text-xs mt-2">{@html renderDescription(cvData?.introduction)}</p>
-	</div>
+		<div class="mt-6">
+			<h2 class="text-2xl font-ropa-sans">Profile</h2>
+			<p class="text-xs mt-2">{@html renderDescription(cvData?.introduction)}</p>
+		</div>
 
-	<div class="mt-6">
-		<h2 class="text-2xl font-ropa-sans">Employment History</h2>
-		{#if cvData?.jobs?.length}
+		<div class="mt-6">
+			<h2 class="text-2xl font-ropa-sans">Employment History</h2>
+			{#if cvData?.jobs?.length}
+				<ul class="mt-2 space-y-4">
+					{#each cvData?.jobs as job}
+						{#if job.carrier}
+							<li>
+								<h3 class="text-base font-bold">{job.company}</h3>
+								<ul class="border-l pl-2 space-y-4">
+									{#each job.promotions as promotion}
+										<li>
+											<h4 class="text-sm font-bold">{promotion.title}</h4>
+											<div class="text-xs uppercase text-gray-500 flex space-x-1">
+												<Date date={promotion.date} /> <span>-</span> <BaseOn data={promotion.baseOn} />
+											</div>
+											<div class="mt-2 text-xs">{@html renderDescription(promotion.description)}</div>
+										</li>
+										{/each}
+									</ul>
+							</li>
+						{:else}
+							<li>
+								<h3 class="text-base font-bold">
+									{job.title} {#if job.company}<span>at {job.company}</span>{/if}
+								</h3>
+								<div class="text-xs uppercase text-gray-500 flex space-x-1">
+									<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
+								</div>
+								<div class="mt-2 text-xs">{@html renderDescription(job.description)}</div>
+							</li>
+						{/if}
+					{/each}
+				</ul>
+			{/if}
+		</div>
+
+		<div class="w-full mt-6">
+			<h2 class="text-2xl font-ropa-sans">Education</h2>
 			<ul class="mt-2 space-y-4">
-				{#each cvData?.jobs as job}
+				{#each cvData?.education as education}
 					<li>
-						<h3 class="text-base font-bold">
-							{job.title} {#if job.company}<span>at {job.company}</span>{/if}
-						</h3>
+						<h3 class="text-base font-bold">{education.title}</h3>
 						<div class="text-xs uppercase text-gray-500 flex space-x-1">
-							<Date date={job.date} /> <span>-</span> <BaseOn data={job.baseOn} />
+							<Date date={education.date} /> <span>-</span> <BaseOn data={education.baseOn} />
 						</div>
-						<div class="mt-2 text-xs">{@html renderDescription(job.description)}</div>
+						<div class="mt-2 text-xs">{education.description}</div>
 					</li>
 				{/each}
 			</ul>
-		{/if}
-	</div>
-
-	<div class="w-full mt-6">
-		<h2 class="text-2xl font-ropa-sans">Education</h2>
-		<ul class="mt-2 space-y-4">
-			{#each cvData?.education as education}
-				<li>
-					<h3 class="text-base font-bold">{education.title}</h3>
-					<div class="text-xs uppercase text-gray-500 flex space-x-1">
-						<Date date={education.date} /> <span>-</span> <BaseOn data={education.baseOn} />
-					</div>
-					<div class="mt-2 text-xs">{education.description}</div>
-				</li>
-			{/each}
-		</ul>
-	</div>
+		</div>
 	{/if}
 </section>
 

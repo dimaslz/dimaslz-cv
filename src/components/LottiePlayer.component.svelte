@@ -23,7 +23,9 @@
 {/if}
 
 {#if browser && LottiePlayer}
-<svelte:component
+
+{@const Component = LottiePlayer}
+<Component
 	this={LottiePlayer}
 	speed={speed}
 	autoplay={play}
