@@ -156,7 +156,7 @@
 
 </script>
 
-<section id="CV" class="flex min-h-full flex-grow text-sm flex-col container max-w-[800px] items-center p-8 text-left w-full">
+<section id="CV" class="flex min-h-full grow text-sm flex-col container max-w-[800px] items-center p-8 text-left w-full">
 	{#if isDownloading}
 		<div class="h-full w-full absolute inset-0 flex items-center justify-center z-0">
 			<div class="text-lg bg-slate-200 p-6 flex items-center justify-center transition-all delay-150 duration-500 animate-bounce">Downloading online CV in a PDF version</div>
@@ -191,11 +191,11 @@
 				{#if job.carrier}
 					<h3 class="text-base font-bold text-left w-full">{job.company}</h3>
 					{#each job.promotions as promotion}
-						<h4 class="text-sm font-bold text-left w-full border-l pl-2">{promotion.title}</h4>
-						<div class="text-xs uppercase text-gray-500 flex space-x-1 text-left w-full border-l pl-2">
+						<h4 class="text-sm font-bold text-left w-full border-l border-gray-200 pl-2">{promotion.title}</h4>
+						<div class="text-xs uppercase text-gray-500 flex space-x-1 text-left w-full border-l border-gray-200 pl-2">
 							<Date date={promotion.date} /> <span>-</span> <BaseOn data={promotion.baseOn} />
 						</div>
-						<div class="pt-2 text-xs border-l pl-2">{@html renderDescription(promotion.description)}</div>
+						<div class="pt-2 text-xs border-l border-gray-200 pl-2">{@html renderDescription(promotion.description)}</div>
 					{/each}
 				{:else}
 					<h3 class="text-base font-bold text-left w-full">
@@ -252,7 +252,7 @@
 						{#if job.carrier}
 							<li>
 								<h3 class="text-base font-bold">{job.company}</h3>
-								<ul class="border-l pl-2 space-y-4">
+								<ul class="border-l border-gray-200 pl-2 space-y-4">
 									{#each job.promotions as promotion}
 										<li>
 											<h4 class="text-sm font-bold">{promotion.title}</h4>

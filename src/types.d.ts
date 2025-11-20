@@ -32,7 +32,9 @@ export type DimaslzData = {
 		baseOn: BaseOn;
 		description: string;
 		keywords: Array<string>;
-		promotion: boolean;
+		carrier: boolean;
+		company: string;
+		promotions: DimaslzData['jobs']
 	}>;
 	network: {
 		linkedin: string;
