@@ -28,12 +28,9 @@
             ref: "development"
         - 
           name: "Set up NodeJS"
-          uses: "actions/setup-node@v4"
+          uses: "actions/setup-node@v5"
           with: 
-            node-version: "22.6"
-        - 
-          name: "Install yarn"
-          run: "npm install -g yarn"
+            node-version: "22.21"
         - 
           name: "Install dependencies"
           run: "yarn install"
@@ -56,9 +53,9 @@
             key: "${{ github.sha }}-cache"
         - 
           name: "Set up NodeJS"
-          uses: "actions/setup-node@v4"
+          uses: "actions/setup-node@v5"
           with: 
-            node-version: "22.6"
+            node-version: "22.21"
         - 
           name: "Build application"
           run: "yarn build"
@@ -66,7 +63,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
+            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
             key: "${{ github.sha }}-cache"
     create-and-push-docker-image: 
       name: "create and push docker image"
@@ -77,7 +74,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
+            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
             key: "${{ github.sha }}-cache"
         - 
           name: "Build docker image"
@@ -89,7 +86,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
+            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
             key: "${{ github.sha }}-cache"
         - 
           name: "Push image"
@@ -106,7 +103,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\nnode_modules\npackage.json\nstatic"
+            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
             key: "${{ github.sha }}-cache"
         - 
           name: "prepare connection"
