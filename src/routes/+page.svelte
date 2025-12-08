@@ -51,18 +51,6 @@
 		return value.replaceAll("\n", "</br>");
 	}
 
-	const renderDescriptionPDF = (value: string) => {
-		return value.split("\n")
-			.map(l => {
-				if (l) {
-					return `<div class="w-full text-xs">${l}</div>`
-				}
-
-				return `<div class="h-3"></div>`
-			})
-			.join("");
-	}
-
 	const container: Element[] = [];
 	let firstPageSize = 0;
 
@@ -180,7 +168,7 @@
 		<div class="h-6"></div>
 		<h2 class="text-2xl font-ropa-sans w-full">Profile</h2>
 		<div class="h-2"></div>
-		<p class="text-xs">{@html renderDescriptionPDF(cvData?.introduction)}</p>
+		<p class="text-xs">{@html renderDescription(cvData?.introduction)}</p>
 
 		<div class="h-6"></div>
 		<h2 class="text-2xl font-ropa-sans w-full">Employment History</h2>
@@ -259,7 +247,9 @@
 											<div class="text-xs uppercase text-gray-500 flex space-x-1">
 												<Date date={promotion.date} /> <span>-</span> <BaseOn data={promotion.baseOn} />
 											</div>
-											<div class="mt-2 text-xs">{@html renderDescription(promotion.description)}</div>
+											<div class="mt-2 text-xs">
+											  {@html renderDescription(promotion.description)}
+											</div>
 										</li>
 										{/each}
 									</ul>
