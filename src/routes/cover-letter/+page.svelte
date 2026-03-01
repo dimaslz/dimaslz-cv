@@ -44,10 +44,6 @@
 		isDownloading = false;
 	};
 
-	const renderDescription = (value: string) => {
-		return value.replaceAll('\n', '</br>');
-	};
-
 	const renderDescriptionPDF = (value: string) => {
 		return value
 			.replace('\n\n', '\n')
@@ -175,9 +171,8 @@
 
 		<div class="mt-6">
 			<h2 class="text-2xl font-ropa-sans">Cover Letter</h2>
-			<!-- TODO: avoid using @html -->
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			<p class="text-xs mt-2">{@html renderDescription(cvData?.coverLetter)}</p>
+			<p class="text-xs mt-2">{@html cvData?.coverLetter}</p>
 		</div>
 	{/if}
 </section>

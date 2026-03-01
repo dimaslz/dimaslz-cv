@@ -6,6 +6,8 @@ export async function load() {
 		.then((data) => data.json())
 		.catch(() => ({}));
 
+	data.coverLetter = data.coverLetter.replace(/\n/g, '<br>');
+
 	return {
 		props: {
 			data,

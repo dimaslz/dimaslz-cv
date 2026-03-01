@@ -46,10 +46,6 @@
 		isDownloading = false;
 	};
 
-	const renderDescription = (value: string) => {
-		return value.replaceAll('\n', '</br>');
-	};
-
 	const container: Element[] = [];
 	let firstPageSize = 0;
 
@@ -169,9 +165,8 @@
 		<div class="h-6"></div>
 		<h2 class="text-2xl font-ropa-sans w-full">Profile</h2>
 		<div class="h-2"></div>
-		<!-- TODO: avoid using @html -->
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		<p class="text-xs">{@html renderDescription(cvData?.introduction)}</p>
+		<p class="text-xs">{@html cvData?.introduction}</p>
 
 		<div class="h-6"></div>
 		<h2 class="text-2xl font-ropa-sans w-full">Employment History</h2>
@@ -196,9 +191,8 @@
 							<BaseOn data={promotion.baseOn} />
 						</div>
 						<div class="pt-2 text-xs border-l border-gray-200 pl-2">
-							<!-- TODO: avoid using @html -->
 							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-							{@html renderDescription(promotion.description)}
+							{@html promotion.description}
 						</div>
 					{/each}
 				{:else}
@@ -211,9 +205,8 @@
 						<BaseOn data={job.baseOn} />
 					</div>
 					<div class="mt-2 text-xs">
-						<!-- TODO: avoid using @html -->
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-						{@html renderDescription(job.description)}
+						{@html job.description}
 					</div>
 				{/if}
 			{/each}
@@ -259,9 +252,8 @@
 
 		<div class="mt-6">
 			<h2 class="text-2xl font-ropa-sans">Profile</h2>
-			<!-- TODO: avoid using @html -->
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			<p class="text-xs mt-2">{@html renderDescription(cvData?.introduction)}</p>
+			<p class="text-xs mt-2">{@html cvData?.introduction}</p>
 		</div>
 
 		<div class="mt-6">
@@ -285,9 +277,8 @@
 												<BaseOn data={promotion.baseOn} />
 											</div>
 											<div class="mt-2 text-xs">
-												<!-- TODO: avoid using @html -->
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-												{@html renderDescription(promotion.description)}
+												{@html promotion.description}
 											</div>
 										</li>
 									{/each}
@@ -305,7 +296,7 @@
 								</div>
 								<!-- TODO: avoid using @html -->
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								<div class="mt-2 text-xs">{@html renderDescription(job.description)}</div>
+								<div class="mt-2 text-xs">{@html job.description}</div>
 							</li>
 						{/if}
 					{/each}
