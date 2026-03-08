@@ -5,6 +5,7 @@
 	import type { DimaslzData } from '@/types';
 	import { downloadPDF } from '@/utils/download-pdf';
 
+	// oxlint-disable-next-line no-unassigned-vars
 	export let data: {
 		props: {
 			data: DimaslzData;

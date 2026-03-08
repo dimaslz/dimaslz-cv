@@ -2,6 +2,7 @@
 	import { Header } from '@/components';
 	import '../app.css';
 
+	// oxlint-disable-next-line no-unassigned-vars
 	export let data: {
 		layout: { isPdf: boolean };
 	};

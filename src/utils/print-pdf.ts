@@ -29,7 +29,7 @@ export async function printPDF({ url = '', format = 'A4' }: Params) {
 		printBackground: true,
 		width: maxWidth,
 		format,
-		pageRanges: Array.from(new Array(numberOfPages))
+		pageRanges: Array.from({ length: numberOfPages })
 			.map((_, key) => key + 1)
 			.join(','),
 	});
