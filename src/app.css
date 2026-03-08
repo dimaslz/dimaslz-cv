@@ -1,18 +1,19 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-body, html {
+body,
+html {
 	@apply h-auto flex min-h-full justify-center;
 }
 
 @font-face {
-  font-family: 'Roboto';
-  src: url('/fonts/Roboto-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+	font-family: 'Roboto';
+	src: url('/fonts/Roboto-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
 	font-display: swap;
 }
 
 @font-face {
-  font-family: 'Ropa Sans';
-  src: url('/fonts/RopaSans-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+	font-family: 'Ropa Sans';
+	src: url('/fonts/RopaSans-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
 	font-display: swap;
 }
 
@@ -25,9 +26,9 @@ body, html {
 }
 
 @keyframes downloadPdf {
-  from {
-    opacity: 1;
-  }
+	from {
+		opacity: 1;
+	}
 
 	95% {
 		opacity: 1;
@@ -49,9 +50,9 @@ body, html {
 		opacity: 0.8;
 	}
 
-  to {
-    opacity: 1;
-  }
+	to {
+		opacity: 1;
+	}
 }
 
 .download-pdf-animation {

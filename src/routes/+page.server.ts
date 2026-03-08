@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/private";
+import { env } from '$env/dynamic/private';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
@@ -6,22 +6,22 @@ export async function load() {
 		.then((data) => data.json())
 		.catch(() => ({}));
 
-	const jobs = data.jobs.reverse().reduce((acc: any[], curr: { promotion: any; company: any; }, index: number) => {
-		if (curr.promotion) {
-			acc[index - 1] = {
-				carrier: true,
-				company: curr.company,
-				promotions: [
-					curr,
-					acc[index - 1],
-				]
-			};
-		} else {
-			acc.push(curr);
-		}
+	const jobs = (data.jobs || [])
+		.reverse()
+		.reduce((acc: any[], curr: { promotion: any; company: any }, index: number) => {
+			if (curr.promotion) {
+				acc[index - 1] = {
+					carrier: true,
+					company: curr.company,
+					promotions: [curr, acc[index - 1]],
+				};
+			} else {
+				acc.push(curr);
+			}
 
-		return acc;
-	}, []).reverse();
+			return acc;
+		}, [])
+		.reverse();
 
 	data.jobs = jobs;
 
@@ -39,6 +39,6 @@ export async function load() {
 	return {
 		props: {
 			data,
-		}
+		},
 	};
 }

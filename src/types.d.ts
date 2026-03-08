@@ -34,7 +34,7 @@ export type DimaslzData = {
 		keywords: Array<string>;
 		carrier: boolean;
 		company: string;
-		promotions: DimaslzData['jobs']
+		promotions: DimaslzData['jobs'];
 	}>;
 	network: {
 		linkedin: string;
@@ -62,5 +62,5 @@ export type DimaslzData = {
 		npm: string;
 		url: string;
 		repository: Array<string>;
-	}>
-}
+	}>;
+};

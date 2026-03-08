@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/private";
+import { env } from '$env/dynamic/private';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
@@ -11,6 +11,6 @@ export async function load() {
 	return {
 		props: {
 			data,
-		}
+		},
 	};
 }

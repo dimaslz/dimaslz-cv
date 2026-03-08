@@ -4,6 +4,7 @@
 	import { DownloadIcon } from '@/components/icons';
 	import { CV_WIDTH } from '@/constants';
 	import type { DimaslzData } from '@/types';
+	import { downloadPDF } from '@/utils/download-pdf';
 
 	export let data: {
 		props: {
@@ -25,23 +26,7 @@
 
 		isDownloading = true;
 
-		const pdf: Blob = await fetch('/api/generate-pdf', {
-			method: 'POST',
-			body: JSON.stringify({
-				url: location.origin,
-			}),
-		}).then((data) => data.blob());
-
-		const pdfURL = URL.createObjectURL(pdf);
-
-		const currentYear: number = new window.Date().getFullYear();
-		const filename = `dimas-lopez-zurita-resume-${currentYear}.pdf`;
-		const link = document.createElement('a');
-		link.href = pdfURL;
-		link.download = filename;
-		link.dispatchEvent(new MouseEvent('click'));
-
-		URL.revokeObjectURL(pdfURL);
+		await downloadPDF('dimas-lopez-zurita-resume');
 
 		isDownloading = false;
 	};
@@ -53,7 +38,7 @@
 		return elements.map((e) => e.clientHeight).reduce((a, b) => a + b, 0);
 	};
 
-	const loop = (allElements: Element[]) => {
+	const loopHTMLElements = (allElements: Element[]) => {
 		const size = getElementsSize(allElements);
 
 		if (size > 1040) {
@@ -62,7 +47,7 @@
 				container.push(last);
 			}
 
-			loop(allElements);
+			loopHTMLElements(allElements);
 		} else {
 			firstPageSize = Number(size);
 		}
@@ -101,7 +86,7 @@
 		}
 
 		const elements = [...document.querySelectorAll('section > *')];
-		loop(elements);
+		loopHTMLElements(elements);
 
 		const section = document.querySelector('section');
 		const classes = section?.className;
@@ -121,8 +106,8 @@
 		});
 
 		const spaceElement = document.createElement('div');
-		spaceElement.style.minHeight = `${restSize / 10 + 4.8}rem`;
-		spaceElement.style.height = `${restSize / 10 + 4.8}rem`;
+		spaceElement.style.minHeight = `${restSize / 10 + 1}rem`;
+		spaceElement.style.height = `${restSize / 10 + 1}rem`;
 		newSection.append(spaceElement);
 
 		container.reverse().forEach((e) => {
@@ -326,8 +311,8 @@
 
 {#if !isPDFVersion}
 	<div>
-		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-		<a href="/cover-letter"
+		<a
+			href="/cover-letter"
 			class={[
 				!isLessThanCV || showButtons ? 'top-4' : '',
 				isLessThanCV && !showButtons ? '-top-10' : '',

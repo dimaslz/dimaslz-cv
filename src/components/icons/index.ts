@@ -1,1 +1,1 @@
-export { default as DownloadIcon } from "./DownloadIcon.component.svelte";
+export { default as DownloadIcon } from './DownloadIcon.component.svelte';

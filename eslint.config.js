@@ -15,26 +15,27 @@ export default [
 		languageOptions: {
 			globals: {
 				...globals.browser,
-				...globals.node
+				...globals.node,
 			},
 			ecmaVersion: 2020,
-			sourceType: 'module'
-		}
+			sourceType: 'module',
+		},
 	},
 	{
 		files: ['**/*.svelte'],
 		languageOptions: {
 			parserOptions: {
-				parser: ts.parser
-			}
-		}
+				parser: ts.parser,
+			},
+		},
 	},
 	{
 		rules: {
-			'@typescript-eslint/no-explicit-any': 'warn'
-		}
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'svelte/no-navigation-without-resolve': 'off',
+		},
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', '**/*.cjs']
-	}
+		ignores: ['build/', '.svelte-kit/', 'dist/', '**/*.cjs'],
+	},
 ];
