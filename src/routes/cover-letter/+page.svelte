@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { LottiePlayer } from '@/components';
 	import { DownloadIcon } from '@/components/icons';
-	import type { DimaslzData } from '@/types';
+	import type { DimaslzCoverLetterData } from '@/types';
 	import { downloadPDF } from '@/utils/download-pdf';
 
 	// oxlint-disable-next-line no-unassigned-vars
 	export let data: {
 		props: {
-			data: DimaslzData;
+			data: DimaslzCoverLetterData;
 		};
 		layout: {
 			isPdf: boolean;
@@ -30,68 +29,7 @@
 		isDownloading = false;
 	};
 
-	const container: Element[] = [];
-	let firstPageSize = 0;
-
-	const getElementsSize = (elements: Element[]) => {
-		return elements.map((e) => e.clientHeight).reduce((a, b) => a + b, 0);
-	};
-
-	const loopHTMLElements = (allElements: Element[]) => {
-		const size = getElementsSize(allElements);
-
-		if (size > 1040) {
-			const last = allElements.pop();
-			if (last) {
-				container.push(last);
-			}
-
-			loopHTMLElements(allElements);
-		} else {
-			firstPageSize = Number(size);
-		}
-	};
-
-	onMount(async () => {
-		if (!isPDFVersion) return;
-
-		const elements = [...document.querySelectorAll('section > *')];
-		loopHTMLElements(elements);
-
-		const section = document.querySelector('section');
-		const pageSize = section?.clientHeight || 0;
-		const classes = section?.className;
-		if (section) {
-			document.querySelector('main')?.removeChild(section);
-		}
-		const newSection = document.createElement('section');
-		newSection.id = 'CV';
-		if (classes) {
-			newSection.className = classes;
-		}
-
-		const restSize = 1040 - firstPageSize;
-
-		elements.forEach((e) => {
-			newSection.append(e);
-		});
-
-		const spaceElement = document.createElement('div');
-		if (pageSize > 1040) {
-			spaceElement.style.minHeight = `${restSize / 10 + 1}rem`;
-			spaceElement.style.height = `${restSize / 10 + 1}rem`;
-			newSection.append(spaceElement);
-		}
-
-		container.reverse().forEach((e) => {
-			newSection.append(e);
-		});
-
-		document.querySelector('main')?.append(newSection);
-	});
-
-	// Process cover letter text by splitting `<br>` to allow pagination of paragraphs.
-	const coverLetterParagraphs = (cvData?.coverLetter || '').split('<br>');
+	const coverLetterParagraphs = cvData?.coverLetterParagraphs || [];
 </script>
 
 <section
@@ -113,20 +51,14 @@
 		</div>
 	</div>
 
-	<div class="h-6 w-full"></div>
-	<h2 class="text-2xl font-ropa-sans w-full">Cover Letter</h2>
-	<div class="h-4 w-full"></div>
-
-	<!-- Render paragraphs individually so that pagination loop() works cleanly -->
-	{#each coverLetterParagraphs as paragraph, i (i)}
-		{#if paragraph.trim()}
-			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			<p class="w-full text-xs">{@html paragraph}</p>
-			<div class="h-2 w-full"></div>
-		{:else}
-			<div class="h-4 w-full"></div>
-		{/if}
-	{/each}
+	<div class="mt-6 w-full">
+		<h2 class="text-2xl font-ropa-sans">Cover Letter</h2>
+		<div class="mt-2 space-y-2">
+			{#each coverLetterParagraphs as paragraph, i (i)}
+				<p class="w-full text-xs break-inside-avoid">{paragraph}</p>
+			{/each}
+		</div>
+	</div>
 </section>
 
 {#if !isPDFVersion}

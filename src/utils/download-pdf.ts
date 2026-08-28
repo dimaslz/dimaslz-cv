@@ -3,6 +3,7 @@ export const downloadPDF = async (name: string) => {
 		method: 'POST',
 		body: JSON.stringify({
 			url: location.href,
+			filename: name,
 		}),
 	}).then((data) => data.blob());
 

@@ -1,7 +1,4 @@
 import puppeteer, { type PaperFormat } from 'puppeteer';
-import { CV_WIDTH } from '@/constants';
-
-const PDF_WIDTH = CV_WIDTH;
 
 type Params = {
 	url: string;
@@ -21,17 +18,11 @@ export async function printPDF({ url = '', format = 'A4' }: Params) {
 		visible: true,
 	});
 
-	const maxWidth = PDF_WIDTH;
-	const height = await page.evaluate(() => document.documentElement.offsetHeight);
+	await page.emulateMediaType('print');
 
-	const numberOfPages = Math.ceil(height / 1040);
 	const pdf = await page.pdf({
 		printBackground: true,
-		width: maxWidth,
 		format,
-		pageRanges: Array.from({ length: numberOfPages })
-			.map((_, key) => key + 1)
-			.join(','),
 	});
 
 	await browser.close();

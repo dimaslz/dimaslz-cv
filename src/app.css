@@ -60,3 +60,16 @@ html {
 	animation-name: downloadPdf;
 	animation-iteration-count: infinite;
 }
+
+@page {
+	size: A4;
+	margin: 15mm 12mm;
+}
+
+@media print {
+	html,
+	body {
+		height: auto;
+		min-height: 0;
+	}
+}
