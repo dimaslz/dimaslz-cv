@@ -27,13 +27,13 @@
           with: 
             ref: "main"
         - 
-          name: "Set up NodeJS"
+          name: "Set up node js"
           uses: "actions/setup-node@v5"
           with: 
-            node-version: "22.21"
+            node-version: "22"
         - 
           name: "Install dependencies"
-          run: "yarn install"
+          run: "pnpm install"
         - 
           name: "Cache"
           uses: "actions/cache@v4"
@@ -52,18 +52,18 @@
             path: "./*"
             key: "${{ github.sha }}-cache"
         - 
-          name: "Set up NodeJS"
+          name: "Set up node js"
           uses: "actions/setup-node@v5"
           with: 
-            node-version: "22.21"
+            node-version: "22"
         - 
           name: "Build application"
-          run: "yarn build"
+          run: "pnpm run build"
         - 
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
+            path: "./*\nbuild\nnode_modules\npackage.json\npublic\npnpm-lock-yaml"
             key: "${{ github.sha }}-cache"
     create-and-push-docker-image: 
       name: "create and push docker image"
@@ -74,7 +74,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
+            path: "./*\nbuild\nnode_modules\npackage.json\npublic\npnpm-lock-yaml"
             key: "${{ github.sha }}-cache"
         - 
           name: "Build docker image"
@@ -86,7 +86,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
+            path: "./*\nbuild\nnode_modules\npackage.json\npublic\npnpm-lock-yaml"
             key: "${{ github.sha }}-cache"
         - 
           name: "Push image"
@@ -103,7 +103,7 @@
           name: "Cache"
           uses: "actions/cache@v4"
           with: 
-            path: "./*\nbuild\npackage.json\nyarn.lock\nnode_modules\nstatic"
+            path: "./*\nbuild\nnode_modules\npackage.json\npublic\npnpm-lock-yaml"
             key: "${{ github.sha }}-cache"
         - 
           name: "prepare connection"
@@ -132,7 +132,7 @@
           run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx-certbot-1-step.tmpl -O nginx.tmpl\n\texport SERVER_NAME=\"cv.dimaslz.dev\"\n\texport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\n\tenvsubst < nginx.tmpl > cv.dimaslz.dev\n\tscp cv.dimaslz.dev prod:/etc/nginx/sites-enabled/cv.dimaslz.dev\n\tssh prod \"nginx -t && systemctl restart nginx\""
         - 
           name: "create certificates"
-          run: "ssh prod \"mkdir -p /usr/share/nginx/html/cv.dimaslz.dev && echo \\\"1\\\" | certbot certonly --webroot -w /usr/share/nginx/html/cv.dimaslz.dev -d cv.dimaslz.dev --email ${{ secrets.FITO_ENV_USER_EMAIL }} --agree-tos --no-eff-email && nginx -t && systemctl restart nginx\""
+          run: "ssh prod \"mkdir -p /usr/share/nginx/html/cv.dimaslz.dev && echo \\\"1\\\" | certbot certonly --webroot -w /usr/share/nginx/html/cv.dimaslz.dev -d cv.dimaslz.dev --cert-name cv.dimaslz.dev --key-type ecdsa --email ${{ secrets.FITO_ENV_USER_EMAIL }} --agree-tos --no-eff-email && nginx -t && systemctl restart nginx\""
         - 
           name: "setup nginx config"
           run: "wget https://statics.dimaslz.dev/fito/nginx/static-config.nginx-certbot-2-step.tmpl -O nginx.tmpl\n\texport SERVER_NAME=\"cv.dimaslz.dev\"\n\texport SERVER_URL=\"http://${{ env.newContainerIP }}:${{ env.newContainerPort }}\"\n\tenvsubst < nginx.tmpl > cv.dimaslz.dev\n\tscp cv.dimaslz.dev prod:/etc/nginx/sites-enabled/cv.dimaslz.dev\n\tssh prod \"nginx -t && systemctl restart nginx\""
