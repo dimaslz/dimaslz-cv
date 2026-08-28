@@ -32,6 +32,12 @@
           with: 
             node-version: "22"
         - 
+          uses: "pnpm/setup@v1"
+          with: 
+            version: "11"
+            runtime: "node@22"
+            cache: true
+        - 
           name: "Install dependencies"
           run: "pnpm install"
         - 
@@ -56,6 +62,12 @@
           uses: "actions/setup-node@v5"
           with: 
             node-version: "22"
+        - 
+          uses: "pnpm/setup@v1"
+          with: 
+            version: "11"
+            runtime: "node@22"
+            cache: true
         - 
           name: "Build application"
           run: "pnpm run build"
