@@ -1,4 +1,4 @@
-import { API_DIMASLZ_URL } from '$env/static/private';
+import { API_DIMASLZ_URL } from '$app/env/private';
 import type { CareerJob, DimaslzCoverLetterData, DimaslzRawData, DimaslzViewData, RawJob } from '@/types';
 
 export async function getRawCvData(): Promise<DimaslzRawData> {

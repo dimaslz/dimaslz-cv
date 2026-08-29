@@ -68,7 +68,7 @@
 
 <section
 	id="CV"
-	class="flex min-h-full grow text-sm flex-col container max-w-[800px] items-center p-8 text-left w-full"
+	class="flex min-h-full grow text-sm flex-col container max-w-200 items-center p-8 text-left w-full"
 >
 	{#if isDownloading}
 		<div class="h-full w-full absolute inset-0 flex items-center justify-center z-0">

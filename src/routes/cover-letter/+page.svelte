@@ -34,7 +34,7 @@
 
 <section
 	id="CV"
-	class="flex min-h-full flex-grow text-sm flex-col container max-w-[800px] items-center py-8 px-8"
+	class="flex min-h-full grow text-sm flex-col container max-w-200 items-center py-8 px-8"
 >
 	<h1 class="text-4xl flex flex-col w-full font-ropa-sans md:mb-0">
 		<span>
