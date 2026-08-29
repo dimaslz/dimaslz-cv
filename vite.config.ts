@@ -7,8 +7,8 @@ export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, 'src'),
-			'~': path.resolve(__dirname),
+			'@': path.resolve(import.meta.dirname, 'src'),
+			'~': path.resolve(import.meta.dirname),
 		},
 		// force the browser build of Svelte components under Vitest, otherwise
 		// vite-plugin-svelte resolves them to the SSR build and `mount()` fails
