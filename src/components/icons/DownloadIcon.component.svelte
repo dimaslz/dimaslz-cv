@@ -8,6 +8,7 @@
 	viewBox="0 0 24 24"
 	stroke-width="1.5"
 	stroke="currentColor"
+	aria-hidden="true"
 	style={`width: ${size}px; height: ${size}px;`}
 >
 	<path

@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { LottiePlayer } from '@/components';
 	import { DownloadIcon } from '@/components/icons';
+	import { SITE_URL } from '@/constants';
 	import type { DimaslzCoverLetterData } from '@/types';
 	import { downloadPDF } from '@/utils/download-pdf';
 
@@ -19,6 +21,11 @@
 	const isPDFVersion = !!data.layout.isPdf;
 	let isDownloading = false;
 
+	const TITLE = 'Cover Letter – Dimas López | Engineering Manager & Full-Stack Engineer';
+	const DESCRIPTION =
+		"Read Dimas López's cover letter — Engineering Manager & Senior Software Engineer in Barcelona with 10+ years of full-stack development experience (React, Node.js, AWS).";
+	const canonicalUrl = `${SITE_URL}${page.url.pathname}`;
+
 	const onDownloadPDFHandler = async () => {
 		if (isDownloading) return;
 
@@ -32,6 +39,19 @@
 	const coverLetterParagraphs = cvData?.coverLetterParagraphs || [];
 </script>
 
+<svelte:head>
+	<title>{TITLE}</title>
+	<meta name="description" content={DESCRIPTION} />
+	<meta itemprop="name" content={TITLE} />
+	<meta itemprop="description" content={DESCRIPTION} />
+	<meta property="og:title" content={TITLE} />
+	<meta property="og:description" content={DESCRIPTION} />
+	<meta property="og:url" content={canonicalUrl} />
+	<meta name="twitter:title" content={TITLE} />
+	<meta name="twitter:description" content={DESCRIPTION} />
+	<link rel="canonical" href={canonicalUrl} />
+</svelte:head>
+
 <section
 	id="CV"
 	class="flex min-h-full grow text-sm flex-col container max-w-200 items-center py-8 px-8"
@@ -43,7 +63,7 @@
 		</span>
 	</h1>
 	<div class="flex flex-col sm:flex-row w-full mt-2">
-		<div class="text-sm uppercase text-slate-500 font-roboto font-light flex">
+		<div class="text-sm uppercase text-slate-600 font-roboto font-light flex">
 			{cvData?.title}
 		</div>
 		<div class="w-full flex sm:items-end sm:justify-end font-light text-xs flex-1 mt-4 sm:mt-0">
@@ -64,7 +84,7 @@
 {#if !isPDFVersion}
 	<a
 		href="/"
-		class="fixed top-4 left-4 flex text-sm p-2 space-x-2 items-center bg-slate-100 hover:bg-slate-200 text-slate-600"
+		class="focus-ring fixed top-4 left-4 flex text-sm p-2 space-x-2 items-center bg-slate-100 hover:bg-slate-200 text-slate-600"
 	>
 		check my resumé
 	</a>
@@ -72,10 +92,12 @@
 	<button
 		on:click={onDownloadPDFHandler}
 		disabled={isDownloading}
+		aria-live="polite"
+		aria-busy={isDownloading}
 		class={[
-			'fixed top-4 right-4 flex text-sm p-2 space-x-2 items-center',
+			'focus-ring fixed top-4 right-4 flex text-sm p-2 space-x-2 items-center',
 			isDownloading
-				? 'bg-slate-50 text-slate-400 cursor-not-allowed'
+				? 'bg-slate-50 text-slate-600 cursor-not-allowed'
 				: 'download-pdf-animation bg-slate-100 hover:bg-slate-200 text-slate-600',
 		].join(' ')}
 	>

@@ -55,10 +55,16 @@ html {
 	}
 }
 
-.download-pdf-animation {
-	animation-duration: 15s;
-	animation-name: downloadPdf;
-	animation-iteration-count: infinite;
+@media (prefers-reduced-motion: no-preference) {
+	.download-pdf-animation {
+		animation-duration: 15s;
+		animation-name: downloadPdf;
+		animation-iteration-count: infinite;
+	}
+}
+
+.focus-ring {
+	@apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-600 focus-visible:ring-offset-2;
 }
 
 @page {

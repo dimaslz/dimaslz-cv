@@ -18,11 +18,21 @@
 	});
 </script>
 
-{#if !browser}
-	<div></div>
-{/if}
+<span aria-hidden="true" class="inline-flex">
+	{#if !browser}
+		<div></div>
+	{/if}
 
-{#if browser && LottiePlayer}
-	{@const Component = LottiePlayer}
-	<Component this={LottiePlayer} {speed} autoplay={play} {src} {loop} {width} background={false} />
-{/if}
+	{#if browser && LottiePlayer}
+		{@const Component = LottiePlayer}
+		<Component
+			this={LottiePlayer}
+			{speed}
+			autoplay={play}
+			{src}
+			{loop}
+			{width}
+			background={false}
+		/>
+	{/if}
+</span>
