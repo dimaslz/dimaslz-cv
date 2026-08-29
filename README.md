@@ -1,26 +1,41 @@
-# My online CV
+# cv.dimaslz.dev - My online CV
 
 My online CV build with Svelte + TS + Tailwind. Also possible to download the PDF version. That PDF is created by [Puppeteer](https://github.com/puppeteer/puppeteer).
 
-> If you are curious, to use puppeteer in Production, you need a special [Dockerfile](/Dockerfile)
+All data is coming from my API Service <https://api.dimaslz.dev>.
 
-Live here: [https://cv.dimaslz.dev](https://cv.dimaslz.dev)
+Live here: <https://cv.dimaslz.dev>
+
+## Stack
+
+- Svelte + SvelteKit
+- TailwindCSS v4
+- Typescript
+- Vite
+- Vitest + Testing Library + Playwringht
+- Docker
 
 ## Lighthouse metrics
 
-<img src="cv-dimaslz-web-vitals-screenshot.png" alt="Lighthouse metrics" style="display: block; margin: 0 auto" />
+mobile
+
+![Lighthouse metrics for Mobile](cwv-mobile.png)
+
+desktop
+
+![Lighthouse metrics for Desktop](cwv-desktop.png)
 
 ## Author
 
 ```json
 {
-	"name": "Dimas López Zurita",
-	"role": "Senior Software Engineer",
-	"alias": "dimaslz",
-	"linkedin": "https://www.linkedin.com/in/dimaslopezzurita",
-	"github": "https://github.com/dimaslz",
-	"twitter": "https://twitter.com/dimaslz",
-	"tags": "tooling, docker, tailwindcss, vue, SAAS, nodejs+express"
+  "name": "Dimas López Zurita",
+  "role": "Senior Software Engineer",
+  "alias": "dimaslz",
+  "linkedin": "https://www.linkedin.com/in/dimaslopezzurita",
+  "github": "https://github.com/dimaslz",
+  "twitter": "https://twitter.com/dimaslz",
+  "tags": "tooling, docker, tailwindcss, vue, SAAS, nodejs+express"
 }
 ```
 
