@@ -16,6 +16,7 @@
     SSH_KEY: "${{ secrets.FITO_ENV_CONNECTION_PRIVATE_KEY }}"
     SSH_HOST: "${{ secrets.FITO_ENV_CONNECTION_HOST }}"
     ATTEMPTS: "${{ github.run_number }}"
+    API_DIMASLZ_URL: "FITO_ENV_API_DIMASLZ_URL"
   jobs: 
     install-dependencies: 
       name: "install dependencies"
