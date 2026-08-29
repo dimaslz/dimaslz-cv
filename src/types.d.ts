@@ -85,12 +85,6 @@ export type DimaslzCoverLetterData = DimaslzRawData & {
 	coverLetterParagraphs: Array<string>;
 };
 
-export type BaseOn = {
-	country: string;
-	city: string;
-	mode?: string;
-};
-
 export type Date = {
 	month: string;
 	year: string;

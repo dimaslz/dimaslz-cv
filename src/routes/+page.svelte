@@ -37,9 +37,9 @@
 			Boolean,
 		),
 	};
-	const personJsonLdMarkup = `<script type="application/ld+json">${JSON.stringify(
-		personJsonLd,
-	).replace(/</g, '\\u003c')}<\/script>`;
+	const personJsonLdMarkup =
+		`<script type="application/ld+json">${JSON.stringify(personJsonLd).replace(/</g, '\\u003c')}</scr` +
+		`ipt>`;
 
 	const downloadPdf = async () => {
 		if (isDownloading) return;
