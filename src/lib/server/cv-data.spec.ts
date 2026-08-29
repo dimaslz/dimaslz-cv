@@ -14,11 +14,11 @@ const baseJob = (overrides: Partial<RawJob> = {}): RawJob => ({
 
 describe('htmlifyNewlines', () => {
 	it('replaces newlines with <br>', () => {
-		expect(htmlifyNewlines('a\nb\nc')).toBe('a<br>b<br>c');
+		expect(htmlifyNewlines('a\nb\nc')).toBe('<span class="w-full text-left">a</span><br><span class="w-full text-left">b</span><br><span class="w-full text-left">c</span>');
 	});
 
 	it('returns the string unchanged when there are no newlines', () => {
-		expect(htmlifyNewlines('a b c')).toBe('a b c');
+		expect(htmlifyNewlines('a b c')).toBe('<span class="w-full text-left">a b c</span>');
 	});
 });
 

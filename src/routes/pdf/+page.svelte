@@ -102,7 +102,7 @@
 
 <section
 	id="CV"
-	class="flex min-h-full grow text-sm flex-col container max-w-200 items-center p-8 text-left w-full"
+	class="flex min-h-full grow text-xs flex-col container max-w-200 items-center p-8 text-left w-full"
 >
 	{#if isDownloading}
 		<div class="h-full w-full absolute inset-0 flex items-center justify-center z-0">
@@ -130,68 +130,52 @@
 
 	<h2 class="text-2xl font-ropa-sans w-full text-left">Profile</h2>
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	<p class="text-xs mt-2 flex flex-col">{@html cvData?.introduction}</p>
+	{@html cvData?.introduction}
 
 	<h2 class="text-2xl font-ropa-sans w-full text-left pt-4 pb-2">Employment History</h2>
 
-	<ul class="w-full">
-		<!-- TODO: resolve use key -->
-		<!-- eslint-disable-next-line svelte/require-each-key -->
-		{#each (cvData?.jobs || []) as job}
-			<li class="break-inside-avoid">
-				{#if 'carrier' in job}
-					<h3 class="text-base font-bold w-full text-left">{job.company}</h3>
-					<ul class="space-y-2">
-						<!-- eslint-disable-next-line svelte/require-each-key -->
-						{#each job.promotions as promotion}
-							<li class="break-inside-avoid">
-								<h4 class="text-sm font-bold w-full text-left border-l border-gray-200 pl-2 pt-2">{promotion.title}</h4>
-								<div class="text-xs uppercase text-gray-600 flex space-x-1 w-full text-left border-l border-gray-200 pl-2">
-									<Date date={promotion.date} /> <span>-</span>
-									<BaseOn data={promotion.baseOn} />
-								</div>
-								<p class="pt-2 text-xs border-l border-gray-200 pl-2 flex flex-col">
-									<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-									{@html promotion.description}
-								</p>
-							</li>
-						{/each}
-					</ul>
-				{:else}
-					<h3 class="text-base font-bold w-full text-left pt-4">
-						{job.title}
-						{#if job.company}<span>at {job.company}</span>{/if}
-					</h3>
-					<div class="text-xs uppercase text-gray-600 flex space-x-1 w-full text-left">
-						<Date date={job.date} /> <span>-</span>
-						<BaseOn data={job.baseOn} />
-					</div>
-					<!-- TODO: avoid using @html -->
-					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-					<p class="mt-2 text-xs pl-2 flex flex-col">{@html job.description}</p>
-				{/if}
-			</li>
-		{/each}
-	</ul>
+	<!-- eslint-disable-next-line svelte/require-each-key -->
+	{#each (cvData?.jobs || []) as job}
+		{#if 'carrier' in job}
+			<h3 class="text-base font-bold w-full text-left">{job.company}</h3>
+			<!-- eslint-disable-next-line svelte/require-each-key -->
+			{#each job.promotions as promotion}
+				<h4 class="text-sm font-bold w-full text-left border-l border-gray-200 pl-2 pt-2">{promotion.title}</h4>
+				<div class="text-xs uppercase text-gray-600 flex space-x-1 w-full text-left border-l border-gray-200 pl-2">
+					<Date date={promotion.date} /> <span>-</span>
+					<BaseOn data={promotion.baseOn} />
+				</div>
+
+				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+				{@html promotion.description}
+			{/each}
+		{:else}
+			<h3 class="text-base font-bold w-full text-left pt-4">
+				{job.title}
+				{#if job.company}<span>at {job.company}</span>{/if}
+			</h3>
+			<div class="text-xs uppercase text-gray-600 flex space-x-1 w-full text-left">
+				<Date date={job.date} /> <span>-</span>
+				<BaseOn data={job.baseOn} />
+			</div>
+			<!-- TODO: avoid using @html -->
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+			{@html job.description}
+		{/if}
+	{/each}
 
 	<div class="w-full mt-6">
 		<h2 class="text-2xl font-ropa-sans">Education</h2>
-		<ul class="mt-2">
-			<!-- TODO: resolve use key -->
-			<!-- eslint-disable-next-line svelte/require-each-key -->
-			{#each cvData?.education as education}
-				<li class="break-inside-avoid">
-					<h3 class="text-base font-bold">{education.title}</h3>
-					<div class="text-xs uppercase text-gray-600 flex space-x-1">
-						<Date date={education.date} /> <span>-</span>
-						<BaseOn data={education.baseOn} />
-					</div>
-					<p class="mt-2 text-xs pl-2">
-						{@html education.description}
-					</p>
-				</li>
-			{/each}
-		</ul>
+		<!-- TODO: resolve use key -->
+		<!-- eslint-disable-next-line svelte/require-each-key -->
+		{#each cvData?.education as education}
+			<h3 class="text-base font-bold">{education.title}</h3>
+			<div class="text-xs uppercase text-gray-600 flex space-x-1 mb-1">
+				<Date date={education.date} /> <span>-</span>
+				<BaseOn data={education.baseOn} />
+			</div>
+			{@html education.description}
+		{/each}
 	</div>
 </section>
 

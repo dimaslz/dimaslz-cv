@@ -2,7 +2,7 @@ export const downloadPDF = async (name: string) => {
 	const pdf: Blob = await fetch('/api/generate-pdf', {
 		method: 'POST',
 		body: JSON.stringify({
-			url: location.href,
+			url: location.origin + "/pdf",
 			filename: name,
 		}),
 	}).then((data) => data.blob());

@@ -7,8 +7,32 @@ export async function getRawCvData(): Promise<DimaslzRawData> {
 	return structuredClone(data);
 }
 
-export function htmlifyNewlines(text: string): string {
-	return text.replace(/\n/g, '<br>');
+export function htmlifyNewlines(
+	text: string,
+	options?: { isPromotion?: boolean; isPdfVersion?: boolean }): string {
+
+	const { isPromotion = false, isPdfVersion = false } = options || {};
+
+	return text
+		.replace(/\n\n/g, '<br>')
+		.replace(/\n/g, '<br>')
+		.split("<br>")
+		.filter(Boolean)
+		.map((l) => {
+			if (isPromotion && !isPdfVersion) {
+				// return `<div class="w-full text-left">${l}</div>`
+				return `<span class="w-full text-left">${l}</span>`
+				// return l;
+			} else if (!isPdfVersion && !isPromotion) {
+				return `<span class="w-full text-left">${l}</span>`
+			} else if (isPdfVersion && isPromotion) {
+				return `<span class="w-full text-left pl-2 pt-2 border-l border-gray-200">${l}</span>`
+			} else if (isPdfVersion) {
+				return `<span class="w-full text-left pl-2 pt-2">${l}</span>`
+			}
+
+			return `<span class="w-full text-left">ddd${l}</span>`
+		}).join(isPdfVersion ? "" : "<br>");
 }
 
 export function groupPromotions(jobs: Array<RawJob>): Array<RawJob | CareerJob> {
@@ -38,25 +62,37 @@ export function groupPromotions(jobs: Array<RawJob>): Array<RawJob | CareerJob> 
 	return grouped.reverse();
 }
 
-export async function getCvViewData(): Promise<DimaslzViewData> {
+export async function getCvViewData(isPdfVersion: boolean = false): Promise<DimaslzViewData> {
 	const data = await getRawCvData();
 
 	return {
 		...data,
-		introduction: htmlifyNewlines(data.introduction),
+		introduction: htmlifyNewlines(data.introduction, { isPromotion: false, isPdfVersion }),
 		jobs: groupPromotions(data.jobs).map((job) => {
 			if ('carrier' in job) {
 				return {
 					...job,
 					promotions: job.promotions.map((promotion) => ({
 						...promotion,
-						description: htmlifyNewlines(promotion.description),
+						description: htmlifyNewlines(promotion.description, {
+							isPromotion: true,
+							isPdfVersion
+						}),
 					})),
 				};
 			}
 
-			return { ...job, description: htmlifyNewlines(job.description) };
+			return {
+				...job,
+				description: htmlifyNewlines(job.description, { isPromotion: false, isPdfVersion })
+			};
 		}),
+		education: data.education.map((education) => {
+			return {
+				...education,
+				description: htmlifyNewlines(education.description, { isPromotion: false, isPdfVersion })
+			}
+		})
 	};
 }
 
