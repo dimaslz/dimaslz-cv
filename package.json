@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"prepare": "svelte-kit sync || echo ''",
 		"start": "node build",
 		"preview": "vite preview --port 2000 --host",
 		"test": "playwright test",
