@@ -12,9 +12,6 @@ const config = {
 			'@/*': './src/*',
 			'~/*': './*',
 		},
-		experimental: {
-			explicitEnvironmentVariables: true
-		},
 	},
 
 	onwarn: (warning, handler) => {

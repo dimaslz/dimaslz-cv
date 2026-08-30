@@ -1,5 +1,6 @@
-import { API_DIMASLZ_URL } from '$app/env/private';
 import type { CareerJob, DimaslzCoverLetterData, DimaslzRawData, DimaslzViewData, RawJob } from '@/types';
+
+const API_DIMASLZ_URL = process.env.API_DIMASLZ_URL ?? 'https://api.dimaslz.dev';
 
 export async function getRawCvData(): Promise<DimaslzRawData> {
 	const data = await fetch(API_DIMASLZ_URL).then((data) => data.json());
