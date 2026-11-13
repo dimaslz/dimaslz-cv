@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ({ request }: { request: Request }) =>
 	target.search = '';
 	target.searchParams.set('pdf', '');
 
-	const pdfFile = (await printPDF({ url: target.toString() })) as Blob;
+	const pdfFile = (await printPDF({ url: target.toString() })) as unknown as BodyInit;
 
 	const currentYear: number = new Date().getFullYear();
 	const safeFilename = sanitizeFilename(filename);
