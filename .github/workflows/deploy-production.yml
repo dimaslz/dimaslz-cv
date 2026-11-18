@@ -107,7 +107,7 @@ jobs:
           cache-to: type=gha,mode=max
       - name: deploy
         env:
-          RUNTIME_KEYS: ""
+          RUNTIME_KEYS: "API_DIMASLZ_URL"
           ALL_VARS: ${{ toJSON(vars) }}
           ALL_SECRETS: ${{ toJSON(secrets) }}
           TARGET_SHA: "${{ inputs.sha || github.sha }}"
