@@ -108,8 +108,7 @@ jobs:
       - name: deploy
         env:
           RUNTIME_KEYS: "API_DIMASLZ_URL"
-          ALL_VARS: ${{ toJSON(vars) }}
-          ALL_SECRETS: ${{ toJSON(secrets) }}
+          FITO_ENV_API_DIMASLZ_URL: ${{ secrets.API_DIMASLZ_URL || vars.API_DIMASLZ_URL }}
           TARGET_SHA: "${{ inputs.sha || github.sha }}"
           IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
           IMAGE_REUSED: ${{ steps.reuse.outputs.reuse }}
@@ -119,9 +118,9 @@ jobs:
           # Only the runtime keys leave GitHub, in the body of an HTTPS request to Fito.
           status=$(jq -n --arg image "ghcr.io/dimaslz/dimaslz-cv:$TARGET_SHA" --arg sha "$TARGET_SHA" \
             --arg digest "$IMAGE_DIGEST" --arg reused "$IMAGE_REUSED" \
-            --argjson v "$ALL_VARS" --argjson s "$ALL_SECRETS" --arg keys "$RUNTIME_KEYS" \
+            --arg keys "$RUNTIME_KEYS" \
             '{image: $image, sha: $sha,
-              env: (($v + $s) | with_entries(select(.key as $k | ($keys | split(",")) | index($k))))}
+              env: ($keys | split(",") | map(select(. != "") | {key: ., value: ($ENV["FITO_ENV_" + .] // "")} | select(.value != "")) | from_entries)}
               + (if $digest == "" then {} else {imageDigest: $digest} end)
               + (if $reused == "true" then {imageReused: true} else {} end)' \
           | curl -sS --max-time 60 -o response.json -w "%{http_code}" -X POST "$FITO_API_URL/v1/deploy" \
