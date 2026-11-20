@@ -74,8 +74,26 @@ jobs:
             echo "::warning title=Commit not on main::$SHA_INPUT is no longer on main (rebased or force-pushed?). Fito deploys it only if it deployed it successfully before"
           fi
           echo "reuse=$reuse" >> "$GITHUB_OUTPUT"
+      - name: find pnpm version
+        id: pnpm
+        if: "steps.reuse.outputs.reuse != 'true'"
+        run: |
+          if jq -e '(.packageManager | type) == "string" and (.packageManager | length) > 0' package.json > /dev/null 2>&1; then
+            version=""
+          else
+            lockfile=$(grep -m1 '^lockfileVersion' pnpm-lock.yaml 2> /dev/null || true)
+            major=$(printf '%s' "$lockfile" | sed -E "s/^lockfileVersion:[[:space:]]*['\"]?([0-9]+).*/\1/")
+            case "$major" in
+              6) version=8 ;;
+              5) version=7 ;;
+              *) version=9 ;;
+            esac
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - uses: pnpm/action-setup@v4
         if: "steps.reuse.outputs.reuse != 'true'"
+        with:
+          version: ${{ steps.pnpm.outputs.version }}
       - uses: actions/setup-node@v4
         if: "steps.reuse.outputs.reuse != 'true'"
         with:
