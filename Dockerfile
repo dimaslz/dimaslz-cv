@@ -1,45 +1,60 @@
-FROM node:24.22.3-alpine AS builder
-
-WORKDIR /app
-
-# update packages
-RUN apk update
-RUN apk add -q --update --no-cache \
-	chromium \
-	nss \
-	freetype \
-	freetype-dev \
-	harfbuzz \
-	ca-certificates \
-	ttf-freefont
+# syntax=docker/dockerfile:1
+FROM node:24.22.3-alpine AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV CI=true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+WORKDIR /app
+
 RUN corepack enable && corepack prepare pnpm@11.24.0 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# production dependencies only (puppeteer is the only runtime dependency)
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+	pnpm install --prod --frozen-lockfile --ignore-scripts
 
-RUN pnpm install --frozen-lockfile
+# all dependencies + build
+FROM base AS builder
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+	pnpm install --frozen-lockfile
 
 COPY . .
 
-ARG NODE_ENV
-ENV NODE_ENV=$NODE_ENV
+# the env schema validates API_DIMASLZ_URL at build time too
 ARG API_DIMASLZ_URL
 ENV API_DIMASLZ_URL=$API_DIMASLZ_URL
 
+RUN NODE_ENV=production pnpm build
+
+# runtime image: no dev dependencies, no sources
+FROM node:24.22.3-alpine AS runner
+
+# chromium is needed by puppeteer to generate the PDFs
+RUN apk add -q --no-cache \
+	chromium \
+	nss \
+	freetype \
+	harfbuzz \
+	ca-certificates \
+	ttf-freefont
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-RUN NODE_ENV=production pnpm build
+WORKDIR /app
+
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=builder /app/build ./build
+COPY package.json ./
+
+USER node
 
 EXPOSE 3000
 
-ENV PORT=3000
-
-HEALTHCHECK --interval=10s --timeout=3s --start-period=20s --retries=3 \
-  CMD test ! -f /tmp/draining && wget -qO- http://127.0.0.1:3000/ >/dev/null || exit 1
-
-CMD ["pnpm", "start"]
+CMD ["node", "build"]
