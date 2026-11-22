@@ -49,6 +49,10 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 WORKDIR /app
 
+# the env schema validates API_DIMASLZ_URL at build time too
+ARG API_DIMASLZ_URL
+ENV API_DIMASLZ_URL=$API_DIMASLZ_URL
+
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build
 COPY package.json ./
