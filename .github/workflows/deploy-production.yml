@@ -107,6 +107,10 @@ jobs:
         if: "steps.reuse.outputs.reuse != 'true'"
         run: |
           pnpm run lint
+      - name: "test"
+        if: "steps.reuse.outputs.reuse != 'true'"
+        run: |
+          pnpm run test
       - uses: docker/setup-buildx-action@v3
         if: "steps.reuse.outputs.reuse != 'true'"
       - name: build image
@@ -119,11 +123,10 @@ jobs:
           tags: ghcr.io/dimaslz/dimaslz-cv:${{ inputs.sha || github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            API_DIMASLZ_URL=${{ vars.API_DIMASLZ_URL }}
       - name: deploy
         env:
-          RUNTIME_KEYS: ""
+          RUNTIME_KEYS: "API_DIMASLZ_URL"
+          FITO_ENV_API_DIMASLZ_URL: ${{ secrets.API_DIMASLZ_URL || vars.API_DIMASLZ_URL }}
           TARGET_SHA: "${{ inputs.sha || github.sha }}"
           IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
           IMAGE_REUSED: ${{ steps.reuse.outputs.reuse }}
